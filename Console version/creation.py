@@ -50,5 +50,6 @@ def filling_new_list():
     print(new_list)
     writing_json(note_name, new_list)
     print("Your list has been successfully saved")
+    input()
     return
 
