@@ -8,22 +8,12 @@ class Training:
     def __init__(self):
         win = main_win()
         lists = os.listdir('lists')
-        label_1 = tk.Label(win, text="Here are all lists which exist at this moment:\n",
-                           bg="#dbdbdb", font=("Arial", 13), width=min_width)
-        label_2 = tk.Label(win, text=f"{lists[:]}",
-                           bg="#dbdbdb", font=("Arial", 12), width=min_width)
-        label_3 = tk.Label(win, text="Print a name of a list which you wanna train:\n",
-                           bg="#dbdbdb", font=("Arial", 15), width=min_width)
-        label_1.pack()
-        label_2.pack()
-        label_3.pack()
+        label_1 = Main_label(win, "Here are all lists which exist at this moment")
+        label_2 = Main_label(win, f"{lists[:]}", 12)
+        label_3 = Main_label(win, "Print a name of a list which you wanna train:")
         file_name = tk.Entry(win)
         file_name.pack()
-        btn1 = tk.Button(win, text='Search',
-                         command=lambda:self.file_check(file_name.get(),win),
-                         bg="#dbdbdb", font=("Arial", 14),
-                         padx=20, pady=5, )
-        btn1.pack()
+        btn1= BTN(win,lambda:self.file_check(file_name.get(),win),"Searh")
         win.mainloop()
 
     def file_check(self, note_name, win):
@@ -36,24 +26,21 @@ class Training:
                 train_list = json.load(r)
             key_words = list(train_list)
             points = 0
+            def finishing(win,points):
+                message_win(win,f"Your final score is {points} points", "black",True,"normal")
             def file_test(points, old_win,text='',fg="black"):
                 if old_win != False:
                     old_win.destroy()
                 win = main_win()
                 if len(key_words) > 0:
                     ran = random.randrange(len(key_words))
-                    label_1 = tk.Label(win, text=f"Translate word '{key_words[ran]}'",
-                                       bg="#dbdbdb", font=("Arial", 13))
+                    label_1 = Main_label(win, f"Translate word '{key_words[ran]}'", 13)
                     answer = tk.Entry(win)
-                    btn1 = tk.Button(win, text='Check',
-                                     command=lambda: check_answer(answer.get(), points,label_2),
-                                     bg="#dbdbdb", font=("Arial", 14),
-                                     padx=20, pady=5, )
                     label_2 = tk.Label(win, text=text,fg=fg, font=("Arial", 13))
-                    label_1.pack()
                     answer.pack()
-                    btn1.pack()
                     label_2.pack()
+                    btn2 = BTN(win, lambda: check_answer(answer.get(), points, label_2), "Check")
+                    btn3 = BTN(win, lambda: finishing(win,points), "Finish")
                 else:
                     message_win(win,f"Your final score is {points} points", "black",True,"normal")
                     return
@@ -67,7 +54,7 @@ class Training:
                         train_list.pop(key_words[ran])
                         key_words.pop(ran)
                         file_test(points, win,
-                                  f"Right!\nYour current points:  {points}", "red")
+                                  f"Right!\nYour current points:  {points}", "green")
 
             file_test(points,False)
 

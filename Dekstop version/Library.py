@@ -1,9 +1,11 @@
-
-import json
-import os
 import tkinter as tk
-from functools import partial
 min_width = 700
+import json
+class Main_label:
+    def __init__(self, win, text, font=14,width=min_width, bg="#dbdbdb"):
+        label = tk.Label(win, text=text,
+                           bg=bg, font=("Arial", font), width=width)
+        label.pack()
 
 class BTN:
 
@@ -14,9 +16,11 @@ class BTN:
                         bg=bg, font=font,
                         padx=padx, pady=pady)
         btn.pack()
+
+def writing_json(file_name, data):
+    with open(f"lists/{file_name}.json", "w") as f:
+        json.dump(data, f)
 def close_win(**sev):
-    print(sev)
-    #win.destroy()
     for i in sev.values():
         if i == None:
             return

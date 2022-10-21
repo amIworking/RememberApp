@@ -17,8 +17,8 @@ main_label.pack()
 
 btn1 = BTN(win,List_maker,"1.Create a new list")
 btn2 = BTN(win,Training,"2.Repeat some list")
-btn3 = BTN(win,test,"3.Edit some list")
-btn4 = BTN(win,test,"4.Delete some list")
+btn3 = BTN(win,Editor,"3.Edit some list")
+btn4 = BTN(win,Deleting,"4.Delete some list")
 btn5 = BTN(win,lambda:win.destroy(),"5.Exit")
 
 
