@@ -26,7 +26,7 @@ class List_maker:
             message_win(win, "This name already exists",)
         else:
             win.destroy()
-            #writing_json(note_name, {})
+            writing_json(note_name, {})
             self.amountOfWords(note_name)
 
 
@@ -88,6 +88,6 @@ class List_maker:
         new_dict = {}
         for i in words:
             new_dict[i[0]]=i[1]
-        #writing_json(note_name, new_dict)
+        writing_json(note_name, new_dict)
 
 
