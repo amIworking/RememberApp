@@ -47,22 +47,26 @@ class Editor:
             label_1 = tk.Label(win, text=f"You choised a word '{word}'",
                                bg="#dbdbdb", font=("Arial", 15),
                                padx=20, pady=20)
-            label_1.grid(row=0)
+            label_1.grid(row=0, columnspan=3, sticky="we")
             label_1 = tk.Label(win, text=f"Fill new fields to save changing",
                                bg="#dbdbdb", font=("Arial", 15),
                                padx=20, pady=20)
-            label_1.grid(row=1)
-            k_word = tk.Entry(win)
-            v_word = tk.Entry(win)
-            k_word.grid(row=2, column=0)
-            v_word.grid(row=2, column=1)
+            label_1.grid(row=1,columnspan=3, sticky="we")
+            label_num = tk.Label(win, text="New word:", font=("Arial", 14), )
+            label_num.grid(row=2, column=0, sticky="e")
+            k_word = tk.Entry(win, width=36,highlightthickness=1)
+            v_word = tk.Entry(win, width=36,highlightthickness=1)
+            k_word.configure(highlightbackground="black", highlightcolor="black")
+            v_word.configure(highlightbackground="black", highlightcolor="black")
+            k_word.grid(row=2, column=1)
+            v_word.grid(row=2, column=2)
             btn3 = tk.Button(win, text='Save3',
                              command=
                              lambda: self.saving_new_word(win,note_name,edit_list,word,
                                                           k_word.get(), v_word.get()),
                              bg="#dbdbdb", font=("Arial", 14),
                              padx=20, pady=5, )
-            btn3.grid(row=3, column=0)
+            btn3.grid(row=3, column=2, sticky="e")
             win.mainloop()
 
     def saving_new_word(self,win, note_name, edit_list, edit_word, new_key, new_value):
@@ -97,12 +101,12 @@ class Deleting:
         else:
             f_warn =  tk.Tk()
             f_warn.title("RememberApp v2.0")
-            f_warn.geometry("700x200+500+400")
+            f_warn.geometry("400x200+500+400")
             f_warn.resizable(False, False)
             label_1 = tk.Label(f_warn, text=f"You're gonna delete {note_name} list"
                                          "\nAre you sure?",
                     fg="red", font=("Arial", 14))
-            label_1.grid(row=0)
+            label_1.grid(row=0, columnspan=2, sticky="we")
             btn1 = tk.Button(f_warn, text="Yes",
                             command=lambda: self.file_delating(win,note_name,f_warn),
                             bg="#dbdbdb", font=("Arial", 14),
@@ -112,13 +116,13 @@ class Deleting:
                             bg="#dbdbdb", font=("Arial", 14),
                             padx=20, pady=5)
             btn1.grid(row=1,column=0)
-            btn2.grid(row=1, column=2)
+            btn2.grid(row=1, column=1, sticky="e")
 
     def file_delating(self, win, note_name,f_warn):
         f_warn.destroy()
         if os.path.isfile(f"lists/{note_name}" + '.json'):
             os.remove(f"lists/{note_name}" + '.json')
             win.destroy()
-            message_win(win, "Deleting was successfull", "black")
+            message_win(win, "Deleting was successfull", "green")
         else:
             message_win(win, f"This list ({note_name}) doesn't exist. Try again")

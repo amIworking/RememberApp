@@ -66,7 +66,8 @@ class List_maker:
                 label_num = tk.Label(win, text=i, font=("Arial", 14),)
                 label_num.grid(row=i,column=0,sticky="e")
                 for j in range(1,3):
-                    field = tk.Entry(win, width=34)
+                    field = tk.Entry(win, width=34,highlightthickness=1)
+                    field.configure(highlightbackground="black", highlightcolor="black")
                     field.grid(row=i, column=j)
                     fields.append(field)
             win.grid_columnconfigure(1, minsize=200)
