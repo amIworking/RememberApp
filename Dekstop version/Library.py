@@ -2,8 +2,8 @@ import tkinter as tk
 min_width = 700
 import json
 class Main_label:
-    def __init__(self, win, text, font=14,width=min_width, bg="#dbdbdb"):
-        label = tk.Label(win, text=text,
+    def __init__(self, win, text, font=14,width=min_width, bg="#dbdbdb", fg="black"):
+        label = tk.Label(win, text=text, fg=fg,
                            bg=bg, font=("Arial", font), width=width)
         label.pack()
 
@@ -35,10 +35,9 @@ def btn_cl(win,args, text='examle', id1=1):
 
 def main_win():
     win = tk.Tk()
+    win.resizable(False,True)
     win.title("RememberApp v2.0")
     win.geometry("400x500+100+200")
-    win.resizable(True, False)
-    win.maxsize(1000, 600)
     win.minsize(min_width, 500)
     return win
 def message_win(m_win,text,color="red", flag=False, fs = 'bold'):
@@ -56,4 +55,4 @@ def message_win(m_win,text,color="red", flag=False, fs = 'bold'):
     return win
 
 def test():
-    pass
+    print("the btn works")
