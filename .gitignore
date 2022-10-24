@@ -5,3 +5,5 @@
 .idea/modules.xml
 .idea/RememberApp.iml
 .idea/vcs.xml
+*.xml
+*.iml
