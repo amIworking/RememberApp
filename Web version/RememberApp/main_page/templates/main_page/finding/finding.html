@@ -13,9 +13,10 @@
         {%include "includes/navbar.html" %}
     </header>
     <div>
-        <form action="#" method="post">
+        <form action="/searching/" method="post">
+            {% csrf_token %}
             <p>Print the list's name which you wanna find</p>
-            <input type="text" name="find" value="">
+            <input type="text" value="" name="searching">
             <input type="submit" value="Find">
         </form>
     </div>

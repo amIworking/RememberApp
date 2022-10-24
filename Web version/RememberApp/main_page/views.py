@@ -3,6 +3,7 @@ import json
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from  django.urls import reverse
+from .models import *
 
 # Create your views here.
 list_path = "main_page/templates/main_page/lists"
@@ -25,7 +26,12 @@ def searh_page(request, search_try):
         return HttpResponseNotFound("Opps")
 
 
-
+def list_searching(request):
+    if request.method == "POST":
+        list_name = request.POST['searching']
+        print(list_name)
+        return HttpResponseRedirect('/ok')
+    return render(request, f"main_page/finding/showing.html")
 
 """
 pages = {"repeating": 1, "editor": 2, "deleting": 3, "creation":4}
