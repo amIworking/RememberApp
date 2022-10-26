@@ -19,12 +19,13 @@
             <input type="text" value="" name="searching">
             <input type="submit" value="Find">
         </form>
+        <p>{{searh_result}}</p>
     </div>
     <div>
         <p>or choose your list from this list:</p>
         <ul>
-            {%for list in lists%}
-            <li ><a href="../lists/test — копия (2).json" class="lists" id="list{{list}}">{{list}}</a></li>
+            {%for list in all_lists%}
+            <li ><a href="/finding/{{list}}" class="lists" id="list{{list}}">{{list}}</a></li>
             {%endfor%}
         </ul>
     </div>

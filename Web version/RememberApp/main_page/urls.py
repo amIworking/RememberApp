@@ -9,6 +9,7 @@ urlpatterns = [
     path('home/', views.main_page),
     path('lists/<str:search_try>/', views.searh_page),
     path('searching/', views.list_searching),
+    path('finding/<str:search_try>/', views.open_list),
     #path('<int:search_try>/', views.redirect),,
     path('<str:search_try>/', views.searh_page),
 ]

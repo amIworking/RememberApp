@@ -13,25 +13,46 @@ def main_page(request):
     data = {"pages":pages}
     return render(request, "main_page/index.html", context=data)
 def searh_page(request, search_try):
-    if search_try in pages:
+    if search_try == 'creating':
         data = {"amount_fields":range(5), "lists":lists}
         return render(request, f"main_page/{search_try}/{search_try}.html",data)
-    elif search_try in lists:
-        HttpResponseRedirect(f"/finding/")
-        with open(f"{list_path+'/'+search_try}", "r") as r:
-            result = json.loads(r.read())
-        data = {"list_info":result, "list_name": search_try}
-        return render(request, f"main_page/finding/showing.html",data)
+    elif search_try == "finding":
+        a = Dictionary.objects.all()
+        all_lists = []
+        for i in a:
+            all_lists.append(i.name)
+        data = {'all_lists': all_lists}
+        return render(request, f"main_page/finding/finding.html",data)
     else:
         return HttpResponseNotFound("Opps")
 
-
 def list_searching(request):
+    a = Dictionary.objects.all()
+    all_lists = []
+    for i in a:
+        all_lists.append(i.name)
+    answer = None
     if request.method == "POST":
         list_name = request.POST['searching']
-        print(list_name)
-        return HttpResponseRedirect('/ok')
-    return render(request, f"main_page/finding/showing.html")
+        if list_name in all_lists:
+            answer = "ok"
+        else:
+            answer = "we didn't find anything"
+    data = {'all_lists':all_lists,'searh_result' : answer}
+    return render(request, f"main_page/finding/finding.html", context=data)
+
+def open_list(request, search_try):
+    searching = Dictionary.objects.filter(name = search_try)\
+        .values_list('id', flat=True)
+    result = {}
+    if len(searching) == 0:
+        result = "This list don't exist"
+    else:
+        target_list = Translates.objects.filter(dictionary_id = searching[0])
+        for i in target_list:
+            result[i.word] = i.translate
+        data = {'list_name':search_try, 'target_list':result}
+    return render(request, f"main_page/finding/target_list.html", data)
 
 """
 pages = {"repeating": 1, "editor": 2, "deleting": 3, "creation":4}
