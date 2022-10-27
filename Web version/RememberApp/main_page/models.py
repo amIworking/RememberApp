@@ -9,7 +9,7 @@ class Dictionary(models.Model):
    name = models.CharField(max_length=40)
    lang_from = models.CharField(max_length=40, default='unknown')
    lang_to = models.CharField(max_length=40, default='unknown')
-   creation_date = models.DateTimeField(default=current_time)
+   creation_date = models.CharField(max_length=40,default=current_time)
 
    def __str__(self):
       return f"{self.name}, {self.lang_from}, {self.lang_to}"

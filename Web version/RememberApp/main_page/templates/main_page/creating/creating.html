@@ -9,10 +9,12 @@
     <div><h1>Creation</h1></div>
     {%include "includes/navbar.html" %}
 </header>
-<input type="submit" value="Find">
 <div>
     <p>Fill fields </p>
-    <form action="#" method="post"> <!--range is a custom filter-->
+    <form action="/creating_saving/" method="post"> <!--range is a custom filter-->
+         {% csrf_token %}
+        <input type="text" name = "list_name" placeholder="list name">
+        <p style="color: red;">{{Error_message}}</p>
         {% for i in 6|range %} 
         <p>
             <input type="text" placeholder="your word" name="word_{{i}}" value="">
@@ -20,11 +22,11 @@
         </p>
         {% endfor %}
         {{more_fields}} 
+        <input type="submit" value="Save">
     </form>
     <input type="submit" value="Add more">
     <input type="submit" value="Delete 1 field bellow">
 </div>
-<input type="submit" value="Save">
 <div>
     <p>or choose your list from this list:</p>
     <ul>
