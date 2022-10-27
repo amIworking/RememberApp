@@ -12,3 +12,6 @@ def range(value, first=0):
         i+=1
         res.append(i)
     return res
+@register.filter(name="id_")
+def id_(indexable, i):
+    return indexable[i]

@@ -1,0 +1,34 @@
+{%extends "base.html"%}
+{%load static%} <!--Adding css-->
+{%load custom_filters%}
+{%block css_creating%}<link rel="stylesheet" href=#> {%endblock %}<!--Adding css-->>
+{%block title%} Creation {%endblock %}
+{%block content%} 
+
+<header>
+    <div><h1>Editing</h1></div>
+</header>
+<input type="submit" value="Find">
+<div>
+    <p>Here you can edit of the list: "{{list_name}}" </p>
+    <form action="#" method="post"> <!--range is a custom filter-->
+        {% for i in target_list %} 
+        <p>
+            <input type="text" placeholder="your word" name="word_{{i}}" value="{{i}}">
+            <input type="text" placeholder ="translation"name="trans_{{target_list|id_:i}}" value="{{target_list|id_:i}}">
+        </p>
+        {% endfor %}
+        {{more_fields}} 
+    </form>
+    <input type="submit" value="Add more">
+    <input type="submit" value="Delete 1 field bellow">
+</div>
+<input type="submit" value="Save">
+<div>
+    <p>or choose your list from this list:</p>
+    <ul>
+
+    </ul>
+</div>
+
+{%endblock %}
