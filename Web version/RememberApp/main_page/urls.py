@@ -10,6 +10,8 @@ urlpatterns = [
     path('lists/<str:search_try>/', views.searh_page),
     path('creating_saving/', views.creating),
     path('searching/', views.list_searching),
+    path('repeating/<str:search_try>/', views.repeat_list),
+    path('delete_confirming/<str:search_try>/', views.delete_confirming),
     path('deleting/<str:search_try>/', views.delete_list),
     path('finding/<str:search_try>/', views.show_target_list),
     path('editing/<str:search_try>/', views.edit_target_list),

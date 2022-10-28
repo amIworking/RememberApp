@@ -1,6 +1,6 @@
 import os
 import json
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from  django.urls import reverse
 from .models import *
@@ -81,17 +81,20 @@ def update_saving(request, search_try):
         for key, value in old_dict.items():
             new_key = request.POST[f"word_{key}"]
             new_value = request.POST[f"trans_{value}"]
+            print(key,new_key)
             if new_key != key:
-                old_list.get(word=key).delete()
+                target = old_list.get(word=key)
+                target.delete()
                 new_word =Translates(dictionary_id = old_name.id, word=new_key,
                                     translate = new_value)
                 new_word.save()
             else:
                 if value != new_value:
                     old_list.filter(word = key).update(translate=new_value)
-            data = open_list(request, new_name)
-            data["Saving_Message"]="Saving was successful"
-            return render(request, "main_page/finding/target_list.html", context=data)
+        data = open_list(request, new_name)
+        data = {"result": "Saving was successful", "color": "green"}
+        return render(request, "main_page/finding/finding.html", data)
+
 
 def creating(request):
     translates = {}
@@ -119,21 +122,30 @@ def creating(request):
                 new_word = Translates(dictionary_id=new_id.id, word=key,
                                       translate=value)
                 new_word.save()
-                print("ok")
+            data = {"result": "Creating has been made", "color":"green"}
+            return render(request, "main_page/finding/finding.html", data)
 
+def delete_confirming(request, search_try):
+    data = {"list_name":search_try}
+    return render(request, "main_page/deleting/deleting.html", data)
 def delete_list(request, search_try):
     all_names = []
     for i in Dictionary.objects.all():
         all_names.append(i.name)
     if search_try not in all_names:
-        print("no")
+        data = {"error_result":"This list dosen't exist", "color":"red"}
+        return render(request, "main_page/finding/finding.html", data)
     else:
         target_list = Dictionary.objects.filter(name=search_try)
         target_words = Translates.objects.filter(dictionary_id=target_list[0].id)
         target_words.delete()
         target_list.delete()
-        print("ok")
+        data = {"result": "Deleting has been made", "color":"green"}
+        return render(request, "main_page/finding/finding.html", data)
 
+def repeat_list(request, search_try):
+    data = open_list(request, search_try)
+    return render(request, 'main_page/repeating/repeating.html', context=data)
 
 
 

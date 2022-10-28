@@ -12,6 +12,8 @@
         <div><h1>Finding</h1></div>
         {%include "includes/navbar.html" %}
     </header>
+    <p style="color: green;">{{result}}</p>
+    <p style="color: red;">{{error_result}}</p>
     <div>
         <form action="/searching/" method="post">
             {% csrf_token %}
