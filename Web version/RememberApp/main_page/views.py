@@ -29,13 +29,12 @@ def searh_page(request, search_try):
 
 #target.html
 def open_list(request, search_try, path="main_page/finding/target_list.html"):
-    searching = Dictionary.objects.filter(name = search_try)\
-        .values_list('id', flat=True)
+    searching = Dictionary.objects.filter(name = search_try)
     result = {}
     if len(searching) == 0:
         result = "This list don't exist"
     else:
-        target_list = Translates.objects.filter(dictionary_id = searching[0])
+        target_list = Translates.objects.filter(dictionary_id = searching[0].id)
         for i in target_list:
             result[i.word] = i.translate
     data = {'list_name':search_try, 'target_list':result}
@@ -95,6 +94,9 @@ def update_saving(request, search_try):
             return render(request, "main_page/finding/target_list.html", context=data)
 
 def creating(request):
+    translates = {}
+    words = []
+    trans = []
     if request.method == "POST":
         list_name = request.POST["list_name"]
         if list_name == "":
@@ -103,17 +105,34 @@ def creating(request):
         else:
             new_list = Dictionary(name=list_name, lang_from = "eng", lang_to = "eng")
             new_list.save()
-            new_id = Dictionary.objects.get(name=new_list)
+            new_id = Dictionary.objects.get(name=list_name)
             for key, value in request.POST.items():
-                if value == "" and "word" in key:
+                if value == "" and "word" in key or value == "" and "trans" in key:
                     data = {"Error_message": "You didn't fill at least 1 field"}
                     return render(request, "main_page/creating/creating.html", context=data)
-                else:
-                    new_word = Translates(translate_id=new_id.id, word=key,
-                                          translate=value)
-                    new_word.save()
-                    print("ok")
+                elif value != "" and "word" in key:
+                    words.append(value)
+                elif value != "" and "trans" in key:
+                    trans.append(value)
+            dictionary = dict(zip(words,trans))
+            for key,value in dictionary.items():
+                new_word = Translates(dictionary_id=new_id.id, word=key,
+                                      translate=value)
+                new_word.save()
+                print("ok")
 
+def delete_list(request, search_try):
+    all_names = []
+    for i in Dictionary.objects.all():
+        all_names.append(i.name)
+    if search_try not in all_names:
+        print("no")
+    else:
+        target_list = Dictionary.objects.filter(name=search_try)
+        target_words = Translates.objects.filter(dictionary_id=target_list[0].id)
+        target_words.delete()
+        target_list.delete()
+        print("ok")
 
 
 
