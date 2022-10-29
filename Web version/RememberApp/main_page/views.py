@@ -67,33 +67,48 @@ def edit_target_list(request, search_try):
     data = open_list(request, search_try)
     return render(request, "main_page/editing/editing.html", data)
 
+
 def update_saving(request, search_try):
     if request.method == "POST":
-        old_name = Dictionary.objects.get(name=search_try)
-        old_list = Translates.objects.filter(dictionary_id = old_name.id)
+
+        # update dict name
         new_name = request.POST["list_name"]
         if search_try != new_name:
+            old_name = Dictionary.objects.get(name=search_try)
             old_name.name = new_name
             old_name.save()
-        old_dict = {}
-        for i in old_list:
-            old_dict[i.word]=i.translate
-        for key, value in old_dict.items():
+
+        # update values
+        old_list = Translates.objects.filter(dictionary__name=search_try)
+        old_dict = {i.word: (i.translate, i) for i in old_list}
+
+        all_edited_data = [key for key in request.POST.keys() if key.startswith("word_")]
+
+        updated = []
+        for key, (value, translate) in old_dict.items():
+            all_edited_data.remove(f"word_{key}")
             new_key = request.POST[f"word_{key}"]
             new_value = request.POST[f"trans_{value}"]
-            print(key,new_key)
+
+            if value != new_value:
+                translate.translate = new_value
             if new_key != key:
-                target = old_list.get(word=key)
-                target.delete()
-                new_word =Translates(dictionary_id = old_name.id, word=new_key,
-                                    translate = new_value)
-                new_word.save()
-            else:
-                if value != new_value:
-                    old_list.filter(word = key).update(translate=new_value)
-        data = open_list(request, new_name)
-        data = {"result": "Saving was successful", "color": "green"}
-        return render(request, "main_page/finding/finding.html", data)
+                translate.word = new_key
+
+            if value != new_value or new_key != key:
+                updated.append(translate)
+
+        new_words = []
+        for word in all_edited_data:
+            key = word[5:]
+            word = request.POST[f"word_{key}"]
+            trans = request.POST[f"trans_{key}"]
+            new_words.append(Translates(dictionary_id=old_name.id, word=word, translate=trans))
+
+        Translates.objects.bulk_update(updated, fields=('word', 'translate'))
+        Translates.objects.bulk_create(new_words)
+
+        return redirect("/finding/")
 
 
 def creating(request):
@@ -122,12 +137,13 @@ def creating(request):
                 new_word = Translates(dictionary_id=new_id.id, word=key,
                                       translate=value)
                 new_word.save()
-            data = {"result": "Creating has been made", "color":"green"}
-            return render(request, "main_page/finding/finding.html", data)
+            return redirect('/finding/')
+
 
 def delete_confirming(request, search_try):
     data = {"list_name":search_try}
     return render(request, "main_page/deleting/deleting.html", data)
+
 def delete_list(request, search_try):
     all_names = []
     for i in Dictionary.objects.all():

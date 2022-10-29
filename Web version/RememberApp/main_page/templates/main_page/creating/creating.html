@@ -15,17 +15,18 @@
          {% csrf_token %}
         <input type="text" name = "list_name" placeholder="list name">
         <p style="color: red;">{{Error_message}}</p>
-        {% for i in 6|range %} 
-        <p>
-            <input type="text" placeholder="your word" name="word_{{i}}" value="">
-            <input type="text" placeholder ="translation"name="trans_{{i}}" value="">
-        </p>
-        {% endfor %}
+        <div id="words">
+            <p>
+                <input type="text" placeholder="your word" name="word_0" value="">
+                <input type="text" placeholder ="translation"name="trans_0" value="">
+                <button type="button" name="delete_0">Delete</button>
+            </p>
+        </div>
         {{more_fields}} 
         <input type="submit" value="Save">
     </form>
-    <input type="submit" value="Add more">
-    <input type="submit" value="Delete 1 field bellow">
+    <button id="add">Add more</button>
+    <button id="delete">Delete</button>
 </div>
 <div>
     <p>or choose your list from this list:</p>
@@ -33,5 +34,28 @@
 
     </ul>
 </div>
+
+<script type="text/javascript">
+    $("#words button[name=\"delete_0\"]").click(function(){
+        $("#words p")[0].remove();
+    })
+
+
+    $("#add").click(function() {
+        let lenght = $("#words p").length;
+        $("#words").append("<p>\n" +
+            "                <input type=\"text\" placeholder=\"your word\" name=\"word_" + lenght +"\" value=\"\">\n" +
+            "                <input type=\"text\" placeholder =\"translation\"name=\"trans_" + lenght +"\" value=\"\">\n" +
+            "                <button type=\"button\" name=\"delete_" + lenght + "\">Delete</button>\n" +
+            "            </p>" );
+        $("#words button[name=\"delete_" + lenght +"\"]").click(function(){
+            $("#words p")[lenght].remove();
+        })
+    });
+
+    $("#delete").click(function() {
+        $("#words p:last-child").remove();
+    });
+</script>
 
 {%endblock %}

@@ -14,17 +14,35 @@
     <form action="/update_saving/{{list_name}}/" method="post"> <!--range is a custom filter-->
         {% csrf_token %}
         <input type="text" name = "list_name" value = {{list_name}}>
-        {% for i in target_list %}
-        <p>
-            <input type="text" placeholder="your word" name="word_{{i}}" value="{{i}}">
-            <input type="text" placeholder ="translation"name="trans_{{target_list|id_:i}}" value="{{target_list|id_:i}}">
-        </p>
-        {% endfor %}
+        <div id="words">
+            {% for i in target_list %}
+            <p>
+                <input type="text" placeholder="your word" name="word_{{i}}" value="{{i}}">
+                <input type="text" placeholder ="translation"name="trans_{{target_list|id_:i}}" value="{{target_list|id_:i}}">
+                <button name="delete_{{i}}">Delete</button>
+            </p>
+            {% endfor %}
+        </div>
         {{more_fields}} 
         <input type="submit" value="Save">
     </form>
-    <input type="submit" value="Add more">
-    <input type="submit" value="Delete 1 field bellow">
+    <button id="add">Add more</button>
+    <button id="delete">Delete</button>
 </div>
+
+
+<script type="text/javascript">
+    $("#add").click(function() {
+        let lenght = $("#words p").length;
+        $("#words").append("<p>\n" +
+            "                <input type=\"text\" placeholder=\"your word\" name=\"word_" + lenght +"\" value=\"\">\n" +
+            "                <input type=\"text\" placeholder =\"translation\"name=\"trans_" + lenght +"\" value=\"\">\n" +
+            "            </p>" );
+    });
+
+    $("#delete").click(function() {
+        $("#words p:last-child").remove();
+    });
+</script>
 
 {%endblock %}
