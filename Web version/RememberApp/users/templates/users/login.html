@@ -1,0 +1,24 @@
+{%extends "base.html"%}
+{%load static%} <!--Adding css-->
+{%load custom_filters%}
+{%block css_creating%}<link rel="stylesheet" href=#> {%endblock %}<!--Adding css-->>
+{%block title%} Login {%endblock %}
+{%block content%}
+    <p>Fill all fields</p>
+    <a href="/login/registration/">registration</a>
+    <form action="/login/login/" method="post">
+        {% csrf_token %}
+        <p style="color: red;">{{Error_message}}</p>
+        <div class="form_names">
+        <div id="username_name">Username:</div>
+        <div id="password_name">Password:</div>
+            </div>
+        <div class="form_inputs">
+            <p>Login <input type="text" name="login" placeholder="username/email"></p>
+            <p>Password: <input type="password" name="password" placeholder="your password A-z, 0-1"></p>
+        </div>
+        
+        <button>Send</button>
+    </form>
+    
+{%endblock %}

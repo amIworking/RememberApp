@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main_page',
+    'users',
     'django_extensions',
 ]
 
@@ -74,11 +75,55 @@ WSGI_APPLICATION = 'RememberApp.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Djangotest',
+        'USER': 'root',
+        'PASSWORD': 'Qw123456!',
+        'HOST': '127.0.0.1',
+        'PORT': '3306'
     }
+
 }
 
+"""
+'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'Djangotest',
+        'USER': 'postgres',
+        'PASSWORD': 'Qw123456',
+        'HOST': '127.0.0.1',
+        'PORT': '5432'
+    }
+
+
+'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'Djangotest',
+        'USER': 'root',
+        'PASSWORD': 'Qw123456!',
+        'HOST': '127.0.0.1',
+        'PORT': '3306'
+    }
+
+
+   'default': {
+      'ENGINE': 'django.db.backends.sqlite3',
+      'NAME': BASE_DIR / 'db.sqlite3',
+   }
+   """
+
+PASSWORD_HASHERS = [
+  'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+  'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+  'django.contrib.auth.hashers.Argon2PasswordHasher',
+  'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+  'django.contrib.auth.hashers.BCryptPasswordHasher',
+  'django.contrib.auth.hashers.SHA1PasswordHasher',
+  'django.contrib.auth.hashers.MD5PasswordHasher',
+  'django.contrib.auth.hashers.UnsaltedSHA1PasswordHasher',
+  'django.contrib.auth.hashers.UnsaltedMD5PasswordHasher',
+  'django.contrib.auth.hashers.CryptPasswordHasher',
+]
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -88,6 +133,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {'min_length': 8}
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -121,3 +167,4 @@ STATICFILES_DIRS=[
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
