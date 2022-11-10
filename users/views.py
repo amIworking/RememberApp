@@ -5,9 +5,11 @@ from django.contrib.auth.hashers import make_password, check_password
 from .models import *
 from  django.template import RequestContext
 
-
 def login_page(request):
-    return render(request, 'users/login.html')
+    response = render(request, 'users/login.html')
+    for key in request.COOKIES.keys():
+        response.delete_cookie(key)
+    return response
 
 
 def registration(request):
@@ -59,14 +61,7 @@ def profile_page(request):
     except:
         redirect('login/')
 
-def drop_cookies(request):
-    responce = HttpResponseRedirect("/login/login")
-    for i in ('username','email','password','first_name', 'last_name'):
-        try:
-            request.delete_cookie(i)
-        except:
-            continue
-    return request
+
 
 
 

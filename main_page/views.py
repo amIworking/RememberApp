@@ -1,4 +1,4 @@
-import os
+
 import json
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
@@ -6,8 +6,6 @@ from  django.urls import reverse
 from .models import *
 
 # Create your views here.
-list_path = "main_page/templates/main_page/lists"
-lists = os.listdir(list_path)
 pages = {"finding": 1, "creating":2}
 def main_page(request):
     data = {"pages":pages}
