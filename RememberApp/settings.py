@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -76,10 +76,10 @@ WSGI_APPLICATION = 'RememberApp.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'Djangotest',
-        'USER': 'root',
-        'PASSWORD': 'Qw123456!',
-        'HOST': '127.0.0.1',
+        'NAME': 'djangotest',
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS'),
+        'HOST': '31.31.203.164',
         'PORT': '3306'
     }
 

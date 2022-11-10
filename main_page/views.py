@@ -11,18 +11,7 @@ def main_page(request):
     data = {"pages":pages}
     return render(request, "main_page/index.html", context=data)
 def searh_page(request, search_try):
-    if search_try == 'creating':
-        data = {"amount_fields":range(5), "lists":lists}
-        return render(request, f"main_page/{search_try}/{search_try}.html",data)
-    elif search_try == "finding":
-        a = Dictionary.objects.all()
-        all_lists = []
-        for i in a:
-            all_lists.append(i.name)
-        data = {'all_lists': all_lists}
-        return render(request, f"main_page/finding/finding.html",data)
-    else:
-        return HttpResponseNotFound("Opps")
+    return HttpResponseNotFound("Opps")
 
 
 #target.html
