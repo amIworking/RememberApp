@@ -1,23 +1,23 @@
 from django.db import models
 import time
-struct = time.localtime()
-current_time = time.strftime('%d.%m.%Y %H:%M', struct)
-
+from django.utils import timezone
+from users.models import User
 
 # Create your models here.
 class Dictionary(models.Model):
-   name = models.CharField(max_length=40)
-   lang_from = models.CharField(max_length=40, default='unknown')
-   lang_to = models.CharField(max_length=40, default='unknown')
-   creation_date = models.CharField(max_length=40,default=current_time)
-
+   #current_time = time.strftime('%d.%m.%Y %H:%M', time.localtime())
+   name = models.CharField(max_length=255)
+   lang_from = models.CharField(max_length=255, blank=True, null=True)
+   lang_to = models.CharField(max_length=255, blank=True, null=True)
+   creation_date = models.DateField(default=timezone.now)
+   owner = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
    def __str__(self):
       return f"{self.name}, {self.lang_from}, {self.lang_to}"
 
 class Translates(models.Model):
    dictionary = models.ForeignKey(Dictionary, on_delete=models.CASCADE)
-   word = models.CharField(max_length=40)
-   translate = models.CharField(max_length=40)
+   word = models.CharField(max_length=255)
+   translate = models.CharField(max_length=255)
 
    def __str__(self):
       return f"{self.dictionary}, {self.word}, {self.translate}"

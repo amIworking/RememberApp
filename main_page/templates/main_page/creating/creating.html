@@ -13,6 +13,12 @@
     <p>Fill fields </p>
     <form action="/creating_saving/" method="post"> <!--range is a custom filter-->
          {% csrf_token %}
+         <p>Click private btn if you don't want to share your dictionary</p>
+         <input type="radio" name="owner" id="global" value="global" checked>
+         <label for="global">Global</label>
+          <input type="radio" name="owner" id="private" value="private">
+          <label for="private">Private</label>
+        <br>
         <input type="text" name = "list_name" placeholder="list name">
         <p style="color: red;">{{Error_message}}</p>
         <div id="words">

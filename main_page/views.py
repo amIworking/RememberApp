@@ -10,7 +10,6 @@ pages = {"finding": 1, "creating":2}
 def main_page(request):
     data = {"pages":pages}
     return render(request, "main_page/index.html", context=data)
-
 def searh_page(request, search_try):
     if search_try == 'creating':
         return render(request, f"main_page/{search_try}/{search_try}.html")
@@ -20,7 +19,7 @@ def searh_page(request, search_try):
         for i in a:
             all_lists.append(i.name)
         data = {'all_lists': all_lists}
-        return render(request, f"main_page/finding/finding.html", data)
+        return render(request, f"main_page/finding/finding.html",data)
     else:
         return HttpResponseNotFound("Opps")
 
@@ -119,7 +118,10 @@ def creating(request):
             data = {"Error_message":"You didn't fill the list name"}
             return render(request, "main_page/creating/creating.html", context=data)
         else:
-            new_list = Dictionary(name=list_name, lang_from = "eng", lang_to = "eng")
+            if request.POST["owner"] == 'private':
+                new_list = Dictionary(name=list_name, lang_from="eng", lang_to="eng")
+            else:
+                new_list = Dictionary(name=list_name, lang_from = "eng", lang_to = "eng")
             new_list.save()
             new_id = Dictionary.objects.get(name=list_name)
             for key, value in request.POST.items():
