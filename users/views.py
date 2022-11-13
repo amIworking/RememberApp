@@ -5,19 +5,31 @@ from django.contrib.auth.hashers import make_password, check_password
 from .models import *
 from  django.template import RequestContext
 
+def check_verification(request):
+    cookies = request.COOKIES
+    login_check = ('username', "email")
+    if any(i not in cookies.keys() for i in login_check):
+        data = {"Error_message": "You didn't login"}
+        return redirect('/login')
+    elif len(User.objects.filter(username=cookies['username'])) == 0:
+        data = {"Error_message": "This username doesn't exit"}
+        return redirect('/login/registration')
+    else:
+        return cookies
+
 def login_page(request):
-    response = render(request, 'users/login.html')
+    response = render(request, 'users/login/login.html')
     for key in request.COOKIES.keys():
         response.delete_cookie(key)
     return response
 
 
 def registration(request):
+    data = {'Error_message': ''}
     email = request.POST.get('email',False)
     username = request.POST.get('username',False)
     password = request.POST.get('password',False)
     reg = (email,username,password)
-    data = {'Error_message': ''}
     if all(reg) == False:
         data ['Error_message'] = 'At least one field is empty'
     elif len(User.objects.filter(email = email))>0:
@@ -41,7 +53,10 @@ def registration(request):
         new_user= User(email = email, username = username, password = en_password)
         new_user.save()
         return redirect('/profile')
-    return render(request, 'users/registration.html', context=data)
+    response = render(request, 'users/registration/registration.html', context=data)
+    for key in request.COOKIES.keys():
+        response.delete_cookie(key)
+    return response
 
 def setting_cookies(request, user):
     data = {'username': user.username,
@@ -49,17 +64,18 @@ def setting_cookies(request, user):
             'first_name': user.first_name,
             'last_name': user.last_name}
     test = redirect('/login/profile')
-    req = render(request, 'users/profile.html')
+    req = render(request, 'users/profile/profile.html')
     for key, value in data.items():
         test.set_cookie(key, value, max_age=None)
     return test
 
 def profile_page(request):
-    try:
-        print(request.COOKIES.get('username'))
-        return render(request, 'users/profile.html')
-    except:
-        redirect('login/')
+    cookies = check_verification(request)
+    data = {'username':cookies['username'],
+            'email':cookies['email'],
+            'first_name':cookies['first_name'],
+            "last_name":cookies['last_name']}
+    return render(request, 'users/profile/profile.html', context=data)
 
 
 
@@ -82,6 +98,6 @@ def login(request):
             return setting_cookies(request, email_check[0])
     else:
         data['Error_message'] = "you wrote wrong username or password"
-        return render(request, 'users/login.html', context=data)
+        return render(request, 'users/login/login.html', context=data)
 
 

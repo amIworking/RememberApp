@@ -4,17 +4,30 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from  django.urls import reverse
 from .models import *
+from users.models import User
 
 # Create your views here.
 pages = {"finding": 1, "creating":2}
+
+def check_verification(request):
+    cookies = request.COOKIES
+    login_check = ('username', "email")
+    if any(i not in cookies.keys() for i in login_check):
+        data = {"Error_message": "You didn't login"}
+        return redirect('/login')
+    elif len(User.objects.filter(username=cookies['username'])) == 0:
+        data = {"Error_message": "This username doesn't exit"}
+        return redirect('/login/registration')
+    else:
+        return cookies
 def main_page(request):
     data = {"pages":pages}
-    return render(request, "main_page/index.html", context=data)
+    return render(request, "main_page/main/index.html", context=data)
 def searh_page(request, search_try):
     if search_try == 'creating':
         return render(request, f"main_page/{search_try}/{search_try}.html")
     elif search_try == "finding":
-        a = Dictionary.objects.all()
+        a = Dictionary.objects.filter()
         all_lists = []
         for i in a:
             all_lists.append(i.name)
@@ -29,13 +42,17 @@ def open_list(request, search_try, path="main_page/finding/target_list.html"):
     searching = Dictionary.objects.filter(name = search_try)
     result = {}
     if len(searching) == 0:
-        result = "This list don't exist"
+        result = "This dictionary doesn't exist"
     else:
         target_list = Translates.objects.filter(dictionary_id = searching[0].id)
         for i in target_list:
             result[i.word] = i.translate
-    data = {'list_name':search_try, 'target_list':result}
+    owner = 'Public'
+    if searching[0].owner_id!=None:
+        owner = User.objects.get(id = searching[0].owner_id.id).username
+    data = {'list_name':search_try, 'target_list':result, 'owner':owner}
     return data
+
 
 def show_target_list(request, search_try):
     data = open_list(request, search_try)
@@ -43,14 +60,14 @@ def show_target_list(request, search_try):
 
 #searching
 def list_searching(request):
-    a = Dictionary.objects.all()
+    a = Dictionary.objects.filter()
     all_lists = []
     for i in a:
         all_lists.append(i.name)
     answer = None
     if request.method == "POST":
         list_name = request.POST['searching']
-        if list_name in all_lists:
+        if all_lists.count(list_name)==1:
             data = open_list(request, list_name)
             return render(request, "main_page/finding/target_list.html", data)
         else:
@@ -70,11 +87,16 @@ def update_saving(request, search_try):
 
         # update dict name
         new_name = request.POST["list_name"]
+        cookies = check_verification(request)
+        old_dictionary = Dictionary.objects.get(name=search_try)
         if search_try != new_name:
-            old_name = Dictionary.objects.get(name=search_try)
-            old_name.name = new_name
-            old_name.save()
-
+            old_dictionary.name = new_name
+            old_dictionary.save()
+        """
+        if request.POST('owner') == 'global':
+            old_dictionary.owner_id = None
+            old_dictionary.save()
+        """
         # update values
         old_list = Translates.objects.filter(dictionary__name=search_try)
         old_dict = {i.word: (i.translate, i) for i in old_list}
@@ -100,7 +122,8 @@ def update_saving(request, search_try):
             key = word[5:]
             word = request.POST[f"word_{key}"]
             trans = request.POST[f"trans_{key}"]
-            new_words.append(Translates(dictionary_id=old_name.id, word=word, translate=trans))
+            new_words.append(Translates(dictionary_id=old_dictionary.id, word=word,
+                                        translate=trans))
 
         Translates.objects.bulk_update(updated, fields=('word', 'translate'))
         Translates.objects.bulk_create(new_words)
@@ -115,11 +138,17 @@ def creating(request):
     if request.method == "POST":
         list_name = request.POST["list_name"]
         if list_name == "":
-            data = {"Error_message":"You didn't fill the list name"}
+            data = {"Error_message":"You didn't fill the dictionary name"}
+            return render(request, "main_page/creating/creating.html", context=data)
+        elif len(Dictionary.objects.filter(name=list_name)):
+            data = {"Error_message": "A dictionary with this name already exists"}
             return render(request, "main_page/creating/creating.html", context=data)
         else:
+            cookies = check_verification(request)
             if request.POST["owner"] == 'private':
-                new_list = Dictionary(name=list_name, lang_from="eng", lang_to="eng")
+                user_id = User.objects.get(username=cookies['username'])
+                new_list = Dictionary(name=list_name, lang_from="eng", lang_to="eng",
+                                      owner_id=user_id)
             else:
                 new_list = Dictionary(name=list_name, lang_from = "eng", lang_to = "eng")
             new_list.save()
@@ -145,19 +174,24 @@ def delete_confirming(request, search_try):
     return render(request, "main_page/deleting/deleting.html", data)
 
 def delete_list(request, search_try):
-    all_names = []
-    for i in Dictionary.objects.all():
-        all_names.append(i.name)
-    if search_try not in all_names:
+    cookies = check_verification(request)
+    check_list = Dictionary.objects.filter(name = search_try)
+    if len(check_list)==0:
         data = {"error_result":"This list dosen't exist", "color":"red"}
         return render(request, "main_page/finding/finding.html", data)
+    elif Dictionary.objects.get(name = search_try).owner_id != User.objects.get(username=cookies.get('username')).id:
+        data = {"error_result": "You can't delete list which does not belong to you",
+                "color":
+            "red"}
+        return render(request, "main_page/finding/finding.html", data)
     else:
-        target_list = Dictionary.objects.filter(name=search_try)
+        owner_id = User.objects.get(cookies['username']).id
+        target_list = Dictionary.objects.filter(name=search_try, owner_id = owner_id)
         target_words = Translates.objects.filter(dictionary_id=target_list[0].id)
         target_words.delete()
         target_list.delete()
         data = {"result": "Deleting has been made", "color":"green"}
-        return render(request, "main_page/finding/finding.html", data)
+        return redirect('finding/')
 
 def repeat_list(request, search_try):
     data = open_list(request, search_try)
