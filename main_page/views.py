@@ -198,6 +198,9 @@ def repeat_list(request, search_try):
     return render(request, 'main_page/repeating/repeating.html', context=data)
 
 
+def speed_training(request):
+    return render(request, 'main_page/speed/speed.html')
+
 
 
 """

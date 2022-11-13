@@ -16,6 +16,7 @@ urlpatterns = [
     path('finding/<str:search_try>/', views.show_target_list),
     path('editing/<str:search_try>/', views.edit_target_list),
     path('update_saving/<str:search_try>/', views.update_saving),
-    #path('<int:search_try>/', views.redirect),,
+    #path('<int:search_try>/', views.redirect),
+    path('speedtraining/', views.speed_training),
     path('<str:search_try>/', views.searh_page),
 ]
