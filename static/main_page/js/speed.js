@@ -7,7 +7,8 @@ let timer;
 function print(){
     let input = document.getElementById('textarea');
     if (input.value.length==1){
-        clearInterval(timer);
+        minutes.innerHTML,seconds.innerHTML='00'
+        clearInterval(timer)
         speed_text.style.visibility='visible';
         timer = setInterval(setTime, 1000);
     }
@@ -23,7 +24,7 @@ function print(){
      }
      if(input.value==text){
         clearInterval(timer);
-        alert(`You finished for ${minutes.innerHTML} minutes, ${seconds.innerHTML} seconds, Your speed is ${speed.innerHTML} letters in a minute`);
+        alert(`You finished for ${minutes.innerHTML} minutes, ${seconds.nnerHTML} seconds, Your speed is {speed.innerHTML} letters in a minute`);
     }
 
 }

@@ -1,0 +1,41 @@
+.page{
+    position: relative;
+}
+.container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+#mainText {
+    text-align: center;
+    font-size: 25px;
+}
+.timer{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    justify-self: center;
+}
+.inputPart {
+}
+#textarea{
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 16;
+    width: 80%;
+}
+
+.timer {
+    display: flex;
+}
+
+#speed_text {
+    visibility: hidden;
+}
+.btn{
+    position: absolute;
+    width: 50px;
+    right: 0;
+}

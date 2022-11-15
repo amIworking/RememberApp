@@ -2,3 +2,6 @@
 
 *.xml
 *.iml
+.RememberApp.sock
+.RememberAppins_uwsgi.ini
+.uwsgi_params
