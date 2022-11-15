@@ -9,7 +9,7 @@ function print(){
     if (input.value.length==1){
         clearInterval(timer);
         speed_text.style.visibility='visible';
-        timer = setInterval(setTime, 1000);
+        timer = setInterval(setTime, 1000); 
     }
     let text = document.getElementById('mainText').innerHTML;
     let text_list = Array.from(text)
