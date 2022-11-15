@@ -2,14 +2,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <noscript> 
+    <meta http-equiv="refresh" content="2; url=https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&index=1">
+</noscript>
     {%load static%}
     <meta charset="UTF-8">
     <title>{%block title%} {%endblock %}</title>
+    <link rel="stylesheet" href="{%static 'css/null.css'%}">
     <link rel="stylesheet" href="{%static 'css/base.css'%}">
+    <!-- trash icon -->
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+   <!-- plus icon -->
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     {%block css_creating%} {%endblock %}
 </head>
 <body>
-    {%block content%} {%endblock %}
+    <header>
+    <div class="container">
+        <div class="div_name"><h1>Creation</h1></div>
+        <span id="nav1">{%include "includes/navbar_log_out.html" %}</span>
+        <span id="nav2">{%include "includes/navbar_log_in.html" %}</span>
+            
+    </div>
+</header>
+    <div class="container">
+        {%block content%} {%endblock %}
+
+    </div>
+    <script type="text/javascript" src="{%static 'js/base.js'%}"></script>
 </body>
 </html>
