@@ -22,7 +22,8 @@ def check_verification(request):
         return cookies
 def main_page(request):
     data = {"pages":pages}
-    return render(request, "main_page/main/index.html", context=data)
+    #return render(request, "main_page/main/index.html", context=data)
+    return redirect('/finding')
 def searh_page(request, search_try):
     if search_try == 'creating':
         return render(request, f"main_page/{search_try}/{search_try}.html")

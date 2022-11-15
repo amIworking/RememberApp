@@ -1,28 +1,21 @@
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Showing</title>
-</head>
-<body>
-    <header>
-        <div><h1>Target list</h1></div>
-    </header>
-    <p style="color: green;">{{Saving_Message}}</p>
-    <div>
-        <p>This is list "{{list_name}}" owned by {{owner}}</p>
-        <p>{{target_list}}</p>
-    </div>
-    <footer>
-        <div>What do you wanna do</div>
+{%extends "base.html"%}
+{%load static%} <!--Adding css-->
+{%load custom_filters%}
+{%block css_creating%}<link rel="stylesheet" href="{%static 'main_page/css/'%}"> {%endblock %}<!--Adding css-->>
+{%block title%} Finding {%endblock %}
+{%block h1%} Target list {%endblock %}
+{%block content%} 
+
+    <p class="m_text">This is list "{{list_name}}" owned by {{owner}}</p>
+        <p class="m_text">{{target_list}}</p>
+        <br>
+        <p class="m_text">What do you wanna do</p>
         <nav>
-            <a href="/repeating/{{list_name}}">Repeat</a>
-            <a href="/editing/{{list_name}}">Edit</a>
-            <a href="/delete_confirming/{{list_name}}/">Delete</a>
+            <a class="btn" href="/repeating/{{list_name}}">Repeat</a>
+            <a class="btn" href="/editing/{{list_name}}">Edit</a>
+            <a class="btn" href="/delete_confirming/{{list_name}}/">Delete</a>
         </nav>
-    </footer>
-</body>
-</html>
+
+{%endblock %}
+        

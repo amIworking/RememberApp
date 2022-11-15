@@ -1,25 +1,19 @@
+{%extends "base.html"%}
+{%load static%} <!--Adding css-->
+{%load custom_filters%}
+{%block css_creating%}<link rel="stylesheet" href="{%static 'main_page/css/'%}"> {%endblock %}<!--Adding css-->>
+{%block title%} Finding {%endblock %}
+{%block h1%} Finding {%endblock %}
+{%block content%} 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Finding</title>
-</head>
-<body>
-    <header>
-        <div><h1>Finding</h1></div>
-        {%include "includes/navbar.html" %}
-    </header>
-    <p style="color: green;">{{result}}</p>
+<p style="color: green;">{{result}}</p>
     <p style="color: red;">{{error_result}}</p>
     <div>
         <form action="/searching/" method="post">
             {% csrf_token %}
-            <p>Print the list's name which you wanna find</p>
-            <input type="text" value="" name="searching">
-            <input type="submit" value="Find">
+            <p class="m_text">Print the list's name which you wanna find</p>
+            <input class="m_input" type="text" value="" name="searching">
+            <input class="btn" type="submit" value="Find">
         </form>
         <p>{{search_result}}</p>
     </div>
@@ -30,6 +24,5 @@
             <li ><a href="/finding/{{list}}/" class="lists" id="list{{list}}">{{list}}</a></li>
             {%endfor%}
         </ul>
-    </div>
-</body>
-</html>
+
+{%endblock %}

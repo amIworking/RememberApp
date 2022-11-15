@@ -1,21 +1,22 @@
 {%extends "base.html"%}
 {%load static%} <!--Adding css-->
 {%load custom_filters%}
-{%block css_creating%}<link rel="stylesheet" href="{%static 'main_page/css/creating.css'%}"> {%endblock %}<!--Adding css-->>
+{%block css_creating%}<link rel="stylesheet" href="{%static 'main_page/css/'%}"> {%endblock %}<!--Adding css-->>
 {%block title%} Creation {%endblock %}
+{%block h1%} Creation {%endblock %}
 {%block content%} 
-    <p>Fill fields </p>
+    <p class="m_subtitle">Fill fields </p>
     <form action="/creating_saving/" method="post" class="m_form"> <!--range is a custom filter-->
          {% csrf_token %}
-         <p>Click private btn if you don't want to share your dictionary</p>
+         <p class='m_text'>Click private btn if you don't want to share your dictionary</p>
          <input type="radio" name="owner" id="global" value="global" checked>
-         <label for="global">Global</label>
+         <label for="global" class="m_text">Global</label>
           <input type="radio" name="owner" id="private" value="private">
-          <label for="private">Private</label>
+          <label for="private" class="m_text">Private</label>
         <br>
         <input class="m_input" type="text" name = "list_name" placeholder="list name">
         <button class="m_btn" type="button"><span id="add" class="material-symbols-outlined">add</span></button>
-        <p style="color: red;">{{Error_message}}</p>
+        <p class='m_text m_error'>{{Error_message}}</p>
         <div id="words">
             <span class="word_field">
                 <input class="m_input" type="text" placeholder="your word" name="word_0" value="">
