@@ -2,20 +2,35 @@
 {%extends "base.html"%}
 {%load static%} <!--Adding css-->
 {%load custom_filters%}
-{%block css_creating%}<link rel="stylesheet" href="{%static 'main_page/css/'%}"> {%endblock %}<!--Adding css-->>
+{%block css_creating%}<link rel="stylesheet" href="{%static 'main_page/css/target_dict.css'%}"> {%endblock %}<!--Adding css-->>
 {%block title%} Finding {%endblock %}
 {%block h1%} Target list {%endblock %}
 {%block content%} 
-
-    <p class="m_text">This is list "{{list_name}}" owned by {{owner}}</p>
-        <p class="m_text">{{target_list}}</p>
-        <br>
-        <p class="m_text">What do you wanna do</p>
-        <nav>
-            <a class="btn" href="/repeating/{{list_name}}">Repeat</a>
-            <a class="btn" href="/editing/{{list_name}}">Edit</a>
-            <a class="btn" href="/delete_confirming/{{list_name}}/">Delete</a>
-        </nav>
-
+    <div class="dict_container">
+        <div class="dict_item dict_name m_subtitle" >Dictionary {{dict_name}}</div>
+        <div class="dict_item dict_info">
+            <div class="dict_icons">
+            <div class="lvl m_text">
+                <span class="material-symbols-outlined">signal_cellular_alt</span>
+                B1
+            </div>
+            <div class="count m_text"><span class="material-symbols-outlined">title</span>{{target_dict|length}}</div>
+        </div>
+        <div class="owner_change">
+            <div class="owner m_text"><span class="symb">@</span>{{owner}}</div>
+             <a class="btn" href="/editing/{{dict_name}}">Edit</a>
+        </div>
+        </div>
+        <div class="dict_item learn" id="test2"><a class="btn" href="/repeating/{{dict_name}}">Repeat</a></div>
+    <table class="dict_item dict_table" id="test">
+        <tr class="dict_head"><th>Word</th><th>Translation</th></tr>
+        {%for key, value in target_dict.items%}
+        <tr class="dict_content"><td>{{key}}</td><td>{{value}}</td></tr>
+        {%endfor%}
+    </table>
+    </div>
+    <div class="del_btn"><a class="btn" href="/delete_confirming/{{dict_name}}/">Delete</a></div>
+        
+<script type="text/javascript" src="{%static 'main_page/js/target_dict.js'%}"></script>
 {%endblock %}
         

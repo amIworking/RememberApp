@@ -41,7 +41,7 @@ function setTime() {
   input = document.getElementById('textarea');
   console.log(seconds);
   if (input.style.color == 'green'){
-    speed.innerHTML = ((letters/parseInt(seconds.innerHTML))*60).toFixed(2);
+    speed.innerHTML = ((letters/totalSeconds)*60).toFixed(2);
   }
 
 }

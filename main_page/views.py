@@ -51,7 +51,7 @@ def open_list(request, search_try, path="main_page/finding/target_list.html"):
     owner = 'Public'
     if searching[0].owner_id!=None:
         owner = User.objects.get(id = searching[0].owner_id.id).username
-    data = {'list_name':search_try, 'target_list':result, 'owner':owner}
+    data = {'dict_name':search_try, 'target_dict':result, 'owner':owner}
     return data
 
 

@@ -7,28 +7,28 @@
 
 {%block content%} 
 <div>
-    <p class="m_subtitle">Here you can edit of the list: "{{list_name}}" </p>
-    <form action="/update_saving/{{list_name}}/" method="post"> <!--range is a custom filter-->
+    <p class="m_subtitle">Here you can edit of the list: "{{dict_name}}" </p>
+    <form action="/update_saving/{{dict_name}}/" method="post" class="m_form"> <!--range is a custom filter-->
         {% csrf_token %}
-        <input class='m_input' type="text" name = "list_name" value = {{list_name}}>
+        <input class='m_input' type="text" name = "dict_name" value = {{dict_name}}>
         <button class="m_btn" type="button"><span id="add" class="material-symbols-outlined">add</span></button>
         <div id="words">
-            {% for i in target_list %}
-            <p>
+            {% for i in target_dict %}
+            <div class="word_field">
                 <input class='m_input' type="text" placeholder="your word" name="word_{{i}}" value="{{i}}">
-                <input class='m_input' type="text" placeholder ="translation"name="trans_{{target_list|id_:i}}" value="{{target_list|id_:i}}">
+                <input class='m_input' type="text" placeholder ="translation"name="trans_{{target_dict|id_:i}}" value="{{target_dict|id_:i}}">
                 <button class='m_btn m_delete' id="remove" name="delete_{{i}}"><span class='material-symbols-outlined'>remove</span></button>
-            </p>
+            </div>
             {% endfor %}
+            {{more_fields}} 
         </div>
-        {{more_fields}} 
         <input type="submit" class='btn save' value="Save">
     </form>
     <button class='btn'id="delete">Delete</button>
 </div>
 
-
-<script type="text/javascript">
+<script type="text/javascript" src="{%static 'main_page/js/editing.js'%}"></script>
+<!-- <script type="text/javascript">
     $("#add").click(function() {
         let lenght = $("#words p").length;
         $("#words").append("<p>\n" +
@@ -40,6 +40,6 @@
     $("#delete").click(function() {
         $("#words p:last-child").remove();
     });
-</script>
+</script> -->
 
 {%endblock %}

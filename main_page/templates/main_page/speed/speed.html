@@ -3,11 +3,10 @@
 {%load custom_filters%}
 {%block css_creating%}<link rel="stylesheet" href="{%static 'main_page/css/speed.css'%}"> {%endblock %}<!--Adding css-->>
 {%block title%} Speed {%endblock %}
-{%block h1%} Speed{%endblock %}
+{%block h1%}Speed{%endblock %}
 {%block content%}
-<div class="page">
     <div class="speed_container">
-    <div id="mainText">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere sequi aspernatur sit delectus ipsam reprehenderit veritatis, modi dolorem blanditiis voluptates debitis laudantium sint unde et aliquid voluptate natus quia eaque?</div>
+        <div id="mainText">Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere sequi aspernatur sit delectus ipsam reprehenderit veritatis, modi dolorem blanditiis voluptates debitis laudantium sint unde et aliquid voluptate natus quia eaque?</div>
     <div class="timer">
         <span id="minutes">00</span>
         <span>:</span>
@@ -15,11 +14,10 @@
     </div>
     <div id = 'speed_text'>Your speed is <span id="speed"></span> letters in a minute</div>
     
-    <textarea class="input" id="textarea" name="" cols="30" rows="10" oninput="print()"></textarea>
+    <textarea class="input" style="border: black 1px solid;" id="textarea" name="" cols="30" rows="10" oninput="print()"></textarea>
+    <div class="stop_btn"><button style="position: static; float: right; width: auto;" class='btn' onclick="stop()">Stop</button></div>
     </div>
-    <button class='btn' onclick="stop()">Stop</button>
-</div>
-
+    
 
 
 <script type="text/javascript" src="{%static 'main_page/js/speed.js'%}"></script>

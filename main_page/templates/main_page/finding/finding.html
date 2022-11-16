@@ -1,28 +1,38 @@
 {%extends "base.html"%}
 {%load static%} <!--Adding css-->
 {%load custom_filters%}
-{%block css_creating%}<link rel="stylesheet" href="{%static 'main_page/css/'%}"> {%endblock %}<!--Adding css-->>
+{%block css_creating%}<link rel="stylesheet" href="{%static 'main_page/css/finding.css'%}"> {%endblock %}<!--Adding css-->>
 {%block title%} Finding {%endblock %}
 {%block h1%} Finding {%endblock %}
 {%block content%} 
-
-<p style="color: green;">{{result}}</p>
+    <div class="find_content">
+    <p style="color: green;">{{result}}</p>
     <p style="color: red;">{{error_result}}</p>
-    <div>
-        <form action="/searching/" method="post">
+        <p class="m_subtitle">Dictionaries from users around the world</p>
+        <form action="/searching/" method="post" class="find_form" >
             {% csrf_token %}
-            <p class="m_text">Print the list's name which you wanna find</p>
             <input class="m_input" type="text" value="" name="searching">
-            <input class="btn" type="submit" value="Find">
+            <input class="btn" type="submit" value="Search">
         </form>
         <p>{{search_result}}</p>
-    </div>
-    <div>
-        <p>or choose your list from this list:</p>
-        <ul>
+    
+    <div class="popular_container">
+        <p class="m_subtitle">Popular:</p>
+        <table class="popular_table">
+            <tr class="popular_head"><th>Language</th><th>Name</th><th>Сount</th><th>Level</th><th>Rainting</th></tr>
             {%for list in all_lists%}
-            <li ><a href="/finding/{{list}}/" class="lists" id="list{{list}}">{{list}}</a></li>
+            <div class="popular_bg">
+            <tr class="popular_content">
+                <td>ENG-RUS</td>
+            <td><a href="/finding/{{list}}/" class="lists" id="list{{list}}">{{list}}</a></td>
+            <td>10</td>
+            <td>B1</td>
+            <td>8.5/10</td>
+            </tr>
             {%endfor%}
-        </ul>
+            </div>
+        </table>
+    </div>
+    </div>
 
 {%endblock %}

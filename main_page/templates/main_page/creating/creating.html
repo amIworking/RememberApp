@@ -18,13 +18,13 @@
         <button class="m_btn" type="button"><span id="add" class="material-symbols-outlined">add</span></button>
         <p class='m_text m_error'>{{Error_message}}</p>
         <div id="words">
-            <span class="word_field">
+            <div class="word_field">
                 <input class="m_input" type="text" placeholder="your word" name="word_0" value="">
                 <input class="m_input" type="text" placeholder ="translation"name="trans_0" value="">
                 <button class='m_btn m_delete' id="remove" type='button' name='delete_0'><span class='material-symbols-outlined'>remove</span></button>
-            </span>
+            </div>
+            {{more_fields}} 
         </div>
-        {{more_fields}} 
         <input type="submit" class='btn save' value="Save">
     </form>
     <button id="delete" class="btn">Delete</button>

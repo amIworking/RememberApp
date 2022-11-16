@@ -1,11 +1,3 @@
-.page{
-    position: relative;
-}
-.container {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-}
 
 #mainText {
     text-align: center;
@@ -17,26 +9,25 @@
     transform: translateX(-50%);
     justify-self: center;
 }
-.inputPart {
-}
+
 #textarea{
     border: black 1px solid;
     position: relative;
     left: 50%;
     transform: translateX(-50%);
     font-size: 16;
-    width: 80%;
+    width: 90%;
+}
+#textarea::-ms-value{
+    font-size: 20px;
 }
 
-.timer {
-    display: flex;
-}
 
 #speed_text {
     visibility: hidden;
 }
 .btn{
-    position: absolute;
-    width: 50px;
-    right: 0;
+    position: static;
+    float: right;
+    width: auto;
 }
