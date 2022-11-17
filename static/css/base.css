@@ -93,6 +93,10 @@ h1{
 .footer_link:hover{
     color: rgba(255, 255, 255, 0.336);
 }
+
+.m_error{
+    color: red;
+}
 .m_subtitle{
     font-size: 25px;
     margin-bottom: 10px;

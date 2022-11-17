@@ -52,7 +52,7 @@ def registration(request):
         #print(check_password(password,en))
         new_user= User(email = email, username = username, password = en_password)
         new_user.save()
-        return redirect('/profile')
+        return redirect('/login/')
     response = render(request, 'users/registration/registration.html', context=data)
     for key in request.COOKIES.keys():
         response.delete_cookie(key)
@@ -71,6 +71,8 @@ def setting_cookies(request, user):
 
 def profile_page(request):
     cookies = check_verification(request)
+    if False in cookies:
+        return cookies[-1]
     data = {'username':cookies['username'],
             'email':cookies['email'],
             'first_name':cookies['first_name'],

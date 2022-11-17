@@ -1,11 +1,11 @@
 $("#words button[name=\"delete_0\"]").click(function(){
-        $("#words p")[0].remove();
+        $("#words div")[0].remove();
     })
 
     $("#add").click(function() {
-        let lenght = $("#words p").length;
-        $("#words").append("<div>\n" +
-            "                <input class=\"m_input\" type=\"text\" placeholder=\"your word\" name=\"word_" + lenght +"\" value=\"\">\n" +
+        let lenght = $("#words div").length;
+        $("#words").append("<div class=word_field>\n" +
+            "                <input class='m_input' type=\"text\" placeholder=\"your word\" name=\"word_" + lenght +"\" value=\"\">\n" +
             "                <input class=\"m_input\" type=\"text\" placeholder =\"translation\"name=\"trans_" + lenght +"\" value=\"\">\n" +
             "                <button class='m_btn m_delete' type=\"button\" name=\"delete_" + lenght + "\"><span class='material-symbols-outlined'>remove</span></button>\n" +
             "            </div>" );
