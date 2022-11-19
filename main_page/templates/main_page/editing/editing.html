@@ -17,7 +17,7 @@
             <div class="word_field">
                 <input class='m_input' type="text" placeholder="your word" name="word_{{i}}" value="{{i}}">
                 <input class='m_input' type="text" placeholder ="translation"name="trans_{{target_dict|id_:i}}" value="{{target_dict|id_:i}}">
-                <button class='m_btn m_delete' id="remove" name="delete_{{i}}"><span class='material-symbols-outlined'>remove</span></button>
+                <button type="button" class='m_btn m_delete' id="remove" name="delete_{{i}}"><span class='material-symbols-outlined'>remove</span></button>
             </div>
             {% endfor %}
             {{more_fields}} 

@@ -1,0 +1,19 @@
+{%load static%}
+
+<div class="m_table_container">
+        <p class="m_subtitle">Own dictiories</p>
+        <table class="m_table">
+            <tr class="m_table_head"><th>Language</th><th>Name</th><th>Сount</th><th>Level</th><th>Rainting</th></tr>
+            {%for dict in own_dicts%}
+            <div class="m_table_bg">
+            <tr class="m_table_content">
+                <td>{{dict|dict:'lang_from'}}-{{dict|dict:'lang_to'}}</td>
+            <td><a href="/finding/{{list}}/" class="lists" id="list{{list}}">{{dict|dict:'name'}}</a></td>
+            <td>{{dict|dict:'count'}}</td>
+            <td>{{dict|dict:'level'}}</td>
+            <td>{{dict|dict:'raiting'}}/10</td>
+            </tr>
+            {%endfor%}
+            </div>
+        </table>
+</div>

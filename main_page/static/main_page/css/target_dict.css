@@ -58,3 +58,7 @@
 .del_btn{
     float: right;
 }
+
+#followed, #owned{
+    background-color: #d9d9d9;
+}

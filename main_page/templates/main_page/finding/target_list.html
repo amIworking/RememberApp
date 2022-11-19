@@ -18,7 +18,13 @@
         </div>
         <div class="owner_change">
             <div class="owner m_text"><span class="symb">@</span>{{owner}}</div>
-             <a class="btn" href="/editing/{{dict_name}}">Edit</a>
+            {%if own_dict%}
+                 <a id="owned" class="btn" href="#">Owned</a>
+            {%elif followed%}
+            <a id='followed' class="btn" href="/removing_dict/{{dict_name}}/">Followed</a>
+            {% else %}
+            <a class="btn follow" href="/adding_dict/{{dict_name}}/">Follow</a>
+            {% endif %}
         </div>
         </div>
         <div class="dict_item learn" id="test2"><a class="btn" href="/repeating/{{dict_name}}">Repeat</a></div>
@@ -29,7 +35,11 @@
         {%endfor%}
     </table>
     </div>
-    <div class="del_btn"><a class="btn" href="/delete_confirming/{{dict_name}}/">Delete</a></div>
+    <div class="change_btn">
+    <a class="btn edit_btn" href="/editing/{{dict_name}}">Edit</a>
+    <a class="btn del_btn" href="/delete_confirming/{{dict_name}}/">Delete</a>
+    </div>
+    
         
 <script type="text/javascript" src="{%static 'main_page/js/target_dict.js'%}"></script>
 {%endblock %}

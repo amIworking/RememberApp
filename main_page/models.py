@@ -17,7 +17,7 @@ class Dictionary(models.Model):
    lang_to = models.CharField(max_length=3, blank=True, null=True)
    owner = models.ForeignKey(User, on_delete=models.CASCADE)
    private = models.BooleanField(default=False)
-   level = models.CharField(max_length=2, choices=level_choices, null=True)
+   level = models.CharField(max_length=2, choices=level_choices, blank=True, null=True)
    raiting = models.IntegerField(null=True)
    creation_date = models.DateField(default=timezone.now)
    def __str__(self):

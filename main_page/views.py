@@ -5,6 +5,7 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from  django.urls import reverse
 from .models import *
 from users.models import User
+from users.views import load_dict
 
 # Create your views here.
 pages = {"finding": 1, "creating":2}
@@ -40,11 +41,8 @@ def searh_page(request, search_try):
             return cookies[-1]
         return render(request, f"main_page/{search_try}/{search_try}.html")
     elif search_try == "finding":
-        a = Dictionary.objects.filter(private=False)
-        all_lists = []
-        for i in a:
-            all_lists.append(i.name)
-        data = {'all_lists': all_lists}
+        popular_dicts = load_dict(Dictionary.objects.filter(private=False))
+        data = {'popular_dicts': popular_dicts}
         return render(request, f"main_page/finding/finding.html",data)
     else:
         return HttpResponseNotFound("Opps")
@@ -68,7 +66,21 @@ def open_dict(request, search_try, path="main_page/finding/target_list.html"):
 
 
 def show_target_list(request, search_try):
+    cookies = check_verification(request)
+    if False in cookies:
+        return cookies[-1]
     data = open_dict(request, search_try)
+    data['own_dict'] = False
+    data['followed'] = False
+    target_dict = Dictionary.objects.filter(name = search_try)
+    user_dists = User.objects.get(username=cookies.get('username')).added_dicts.all()
+    if len(target_dict) == 0:
+        return print("There is no dictionary like this")
+    elif data['owner'] == cookies.get('username'):
+        data['own_dict'] = True
+    elif target_dict[0] in user_dists:
+        data['followed'] = True
+    print(len(cookies.get('last_name')))
     return render(request, "main_page/finding/target_list.html", data)
 
 #searching
@@ -77,18 +89,18 @@ def list_searching(request):
     if False in cookies:
         return cookies[-1]
     a = Dictionary.objects.filter(private=False)
-    all_lists = []
+    all_dicts = []
     for i in a:
-        all_lists.append(i.name)
+        all_dicts.append(i.name)
     answer = None
     if request.method == "POST":
         dict_name = request.POST['searching']
-        if all_lists.count(dict_name)==1:
+        if all_dicts.count(dict_name)==1:
             data = open_dict(request, dict_name)
             return render(request, "main_page/finding/target_list.html", data)
         else:
             answer = "we didn't find anything"
-            data = {'all_lists':all_lists,'search_result' : answer}
+            data = {'all_dicts':all_dicts,'search_result' : answer}
             return render(request, f"main_page/finding/finding.html", context=data)
 
 
@@ -128,7 +140,13 @@ def update_saving(request, search_try):
 
         updated = []
         for key, (value, translate) in old_dict.items():
-            all_edited_data.remove(f"word_{key}")
+            try:
+                all_edited_data.remove(f"word_{key}")
+            except ValueError:
+                for i in old_list:
+                    if i.word == key and i.translate == value:
+                        Translates.objects.get(id=i.id).delete()
+                continue
             new_key = request.POST[f"word_{key}"]
             new_value = request.POST[f"trans_{value}"]
 
@@ -224,6 +242,37 @@ def delete_list(request, search_try):
         target_list.delete()
         data = {"result": "Deleting has been made", "color":"green"}
         return redirect('finding/')
+
+def adding_follow_dict(request, search_try):
+    cookies = check_verification(request)
+    if False in cookies:
+        return cookies[-1]
+    target_dict = Dictionary.objects.filter(name = search_try)
+    if len(target_dict) == 0:
+        return print("There is no dictionary like this")
+    user = User.objects.get(username=cookies.get('username'))
+    if target_dict[0] in user.added_dicts.all():
+        return print("This dict is already followed by you")
+    user.added_dicts.add(target_dict[0])
+    user.save()
+    return redirect(f'/finding/{search_try}/')
+
+def remove_follow_dict(request, search_try):
+    cookies = check_verification(request)
+    if False in cookies:
+        return cookies[-1]
+    target_dict = Dictionary.objects.filter(name=search_try)
+    if len(target_dict) == 0:
+        return print("There is no dictionary like this")
+    user = User.objects.get(username=cookies.get('username'))
+    if target_dict[0] not in user.added_dicts.all():
+        return print("This dict is already unfollowed by you")
+    user.added_dicts.remove(target_dict[0])
+    user.save()
+    return redirect(f'/finding/{search_try}/')
+
+
+
 
 def repeat_list(request, search_try):
     cookies = check_verification(request)

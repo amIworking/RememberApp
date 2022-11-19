@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from  django.urls import reverse
 from django.contrib.auth.hashers import make_password, check_password
 from .models import *
+from main_page.models import Dictionary, Translates
 from  django.template import RequestContext
 
 def check_verification(request):
@@ -69,6 +70,19 @@ def setting_cookies(request, user):
         test.set_cookie(key, value, max_age=None)
     return test
 
+def load_dict(list):
+    target_list = []
+    for i in list:
+        local_dict = {}
+        local_dict["name"] = i.name
+        local_dict['lang_from'] = i.lang_from
+        local_dict['lang_to'] = i.lang_to
+        local_dict['count'] = len(Translates.objects.filter(dictionary=i))
+        local_dict['level'] = i.level
+        local_dict['raiting'] = 8.5
+        target_list.append(local_dict)
+    return target_list
+
 def profile_page(request):
     cookies = check_verification(request)
     if False in cookies:
@@ -77,6 +91,11 @@ def profile_page(request):
             'email':cookies['email'],
             'first_name':cookies['first_name'],
             "last_name":cookies['last_name']}
+    user = User.objects.get(username = cookies.get('username'))
+    own_dicts = load_dict(Dictionary.objects.filter(owner=user))
+    data ['own_dicts'] = own_dicts
+    followed_dicts = load_dict(user.added_dicts.all())
+    data['followed_dicts'] = followed_dicts
     return render(request, 'users/profile/profile.html', context=data)
 
 

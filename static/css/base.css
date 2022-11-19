@@ -173,6 +173,51 @@ h1{
 .save{
     float: right;
 }
+
+.m_table_container {
+    margin: 100px;
+}
+
+.m_table {
+    margin-top: 30px;
+    display: inline-block;
+    background-color: #d9d9d9;
+    border: none;
+    border-spacing: 0px;
+    border-collapse: collapse;
+}
+
+.m_table_head {
+    background-color: white;
+}
+
+.m_table_head th {
+    font-weight: 400;
+    background-color: white;
+    padding: 10px 20px;
+}
+
+.m_table_content td {
+    padding: 10px 20px;
+    font-weight: 600;
+}
+
+.m_table a{
+    color: black;
+}
+
+.m_table a:hover {
+    color: rgba(255, 255, 255, 0.678);
+}
+
+/* .popular_content{
+    background-color: #d9d9d9;
+} */
+.m_table_bg {
+    background-color: #d9d9d9;
+}
+
+
 @media (orientation: portrait) {
 .container {
         width: 100%;
