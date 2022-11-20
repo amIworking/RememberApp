@@ -281,10 +281,21 @@ def repeat_list(request, search_try):
     cookies = check_verification(request)
     if False in cookies:
         return cookies[-1]
-    data = open_dict(request, search_try)
-    return render(request, 'main_page/repeating/repeating.html', context=data)
+    get_dict = Dictionary.objects.filter(name = search_try)
+    if len(get_dict) == 0:
+        return print("This dict doesn't exist")
+    word_list = Translates.objects.filter(dictionary = get_dict[0])
+    if len(word_list)==0:
+        return print("Your dict is empty")
+    target_dict = {}
+    for i in word_list:
+        target_dict[f"{i.word}"]=f"{i.translate}"
+    data = {"target_dict":target_dict, "dict_name": search_try}
+    response = render(request, 'main_page/repeating/repeating.html', context=data)
+    return response
 
-
+def adding_points(request, search_try):
+    return redirect(f'/finding/{search_try}/')
 def speed_training(request):
     return render(request, 'main_page/speed/speed.html')
 

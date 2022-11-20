@@ -64,11 +64,11 @@ def setting_cookies(request, user):
             'email': user.email,
             'first_name': user.first_name,
             'last_name': user.last_name}
-    test = redirect('/login/profile')
+    response = redirect('/login/profile')
     req = render(request, 'users/profile/profile.html')
     for key, value in data.items():
-        test.set_cookie(key, value, max_age=None)
-    return test
+        response.set_cookie(key, value, max_age=None)
+    return response
 
 def load_dict(list):
     target_list = []

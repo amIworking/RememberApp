@@ -4,7 +4,9 @@
 {%block css_creating%}<link rel="stylesheet" href="{%static 'users/css/profile.css'%}"> {%endblock %}<!--Adding css-->>
 {%block title%} Profile {%endblock %}
 {%block h1%} Profile {%endblock %}
+
 {%block content%} 
+<body onload="tr_check('followed_dicts');tr_check('own_dicts')">
 <div id="profile_info">
         <div id="profile_names">
             <span class="pr_name">Email:</span>
@@ -23,7 +25,7 @@
         </div>
         </form>
     </div>
-    <div id="own_dicts" onload="tr_check('own_dicts')">
+    <div id="own_dicts">
     <div class="m_table_container">
         <p class="m_subtitle">Own dictiories</p>
         <table class="m_table">
@@ -42,7 +44,7 @@
         </table>
     </div>
     </div>
-    <div id="followed_dicts" onload="tr_check('followed_dicts')">
+    <div id="followed_dicts">
         <div class="m_table_container">
         <p class="m_subtitle">Followed dictiories</p>
         <table class="m_table" id="followed_table">
@@ -66,6 +68,6 @@
 </div>
     
 <script type="text/javascript" src="{%static 'users/js/profile.js'%}"></script>
-
+</body>
 
 {%endblock %}
