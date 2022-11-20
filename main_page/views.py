@@ -80,7 +80,7 @@ def show_target_list(request, search_try):
         data['own_dict'] = True
     elif target_dict[0] in user_dists:
         data['followed'] = True
-    print(len(cookies.get('last_name')))
+    data['lang_lvl'] = target_dict[0].level
     return render(request, "main_page/finding/target_list.html", data)
 
 #searching
@@ -192,6 +192,9 @@ def creating(request):
             private = False
             lang_from = request.POST.get('lang_from')
             lang_to = request.POST.get('lang_to')
+            if lang_from=="" or lang_to == "":
+                data = {"Error_message": "You didn't fill at least 1 language field"}
+                return render(request, "main_page/creating/creating.html", context=data)
             if request.POST["owner"] == 'private':
                 private = True
             new_list = Dictionary(name=dict_name, lang_from = lang_from, lang_to =

@@ -13,11 +13,11 @@ class Dictionary(models.Model):
                     ("C1","C1"),
                     ("C2","C2")]
    name = models.CharField(max_length=255, unique=True)
-   lang_from = models.CharField(max_length=3, blank=True, null=True)
-   lang_to = models.CharField(max_length=3, blank=True, null=True)
+   lang_from = models.CharField(max_length=3, default="EN")
+   lang_to = models.CharField(max_length=3, default="RU")
    owner = models.ForeignKey(User, on_delete=models.CASCADE)
    private = models.BooleanField(default=False)
-   level = models.CharField(max_length=2, choices=level_choices, blank=True, null=True)
+   level = models.CharField(max_length=2, choices=level_choices)
    raiting = models.IntegerField(null=True)
    creation_date = models.DateField(default=timezone.now)
    def __str__(self):

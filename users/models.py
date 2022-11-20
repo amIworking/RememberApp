@@ -10,6 +10,8 @@ class User(models.Model):
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
     added_dicts = models.ManyToManyField('main_page.Dictionary')
+    points = models.IntegerField(default=0)
+    user_level = models.IntegerField(default=0)
 
 
 

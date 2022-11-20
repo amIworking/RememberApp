@@ -1,7 +1,3 @@
-#lang_from::-ms-value, #lang_from::-ms-value{
-    text-transform: capitalize;
-}
-
 #lang_from,#lang_from {
-    text-transform: capitalize;
+    width: 30%;
 }

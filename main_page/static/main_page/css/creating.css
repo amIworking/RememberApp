@@ -1,7 +1,14 @@
-#lang_from::-ms-value, #lang_from::-ms-value{
-    text-transform: capitalize;
+#lang_from,#lang_to {
+}
+.select_fields{
+    display: flex;
+    
+    flex-direction: row;
 }
 
-#lang_from,#lang_from {
-    text-transform: capitalize;
+.select_field {
+    margin: 20px 20px 0 0;
+}
+#words_text{
+    margin-top: 20px;
 }

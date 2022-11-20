@@ -23,13 +23,14 @@
         </div>
         </form>
     </div>
+    <div id="own_dicts" onload="tr_check('own_dicts')">
     <div class="m_table_container">
         <p class="m_subtitle">Own dictiories</p>
         <table class="m_table">
             <tr class="m_table_head"><th>Language</th><th>Name</th><th>Сount</th><th>Level</th><th>Rainting</th></tr>
             {%for dict in own_dicts%}
             <div class="m_table_bg">
-            <tr class="m_table_content">
+            <tr class="m_table_content" id="table_content">
                 <td>{{dict|dict:'lang_from'}}-{{dict|dict:'lang_to'}}</td>
             <td><a href="/finding/{{dict|dict:'name'}}/" class="lists" id="list{{list}}">{{dict|dict:'name'}}</a></td>
             <td>{{dict|dict:'count'}}</td>
@@ -40,13 +41,15 @@
             </div>
         </table>
     </div>
-    <div class="m_table_container">
+    </div>
+    <div id="followed_dicts" onload="tr_check('followed_dicts')">
+        <div class="m_table_container">
         <p class="m_subtitle">Followed dictiories</p>
-        <table class="m_table">
+        <table class="m_table" id="followed_table">
             <tr class="m_table_head"><th>Language</th><th>Name</th><th>Сount</th><th>Level</th><th>Rainting</th></tr>
             {%for dict in followed_dicts%}
                 <div class="m_table_bg">
-                <tr class="m_table_content">
+                <tr class="m_table_content" id="table_content">
                 <td>{{dict|dict:'lang_from'}}-{{dict|dict:'lang_to'}}</td>
                 <td><a href="/finding/{{dict|dict:'name'}}/" class="lists" id="list{{dict|dict:'name'}}">{{dict|dict:'name'}}</a></td>
                 <td>{{dict|dict:'count'}}</td>
@@ -58,6 +61,8 @@
         </table>
     </div>
 
+    </div>
+    
 </div>
     
 <script type="text/javascript" src="{%static 'users/js/profile.js'%}"></script>

@@ -12,7 +12,7 @@
             <div class="dict_icons">
             <div class="lvl m_text">
                 <span class="material-symbols-outlined">signal_cellular_alt</span>
-                B1
+                {{lang_lvl}}
             </div>
             <div class="count m_text"><span class="material-symbols-outlined">title</span>{{target_dict|length}}</div>
         </div>
@@ -27,7 +27,9 @@
             {% endif %}
         </div>
         </div>
+        {%if own_dict or followed%}
         <div class="dict_item learn" id="test2"><a class="btn" href="/repeating/{{dict_name}}">Repeat</a></div>
+        {% endif %}
     <table class="dict_item dict_table" id="test">
         <tr class="dict_head"><th>Word</th><th>Translation</th></tr>
         {%for key, value in target_dict.items%}
@@ -35,10 +37,12 @@
         {%endfor%}
     </table>
     </div>
+    {%if own_dict%}
     <div class="change_btn">
-    <a class="btn edit_btn" href="/editing/{{dict_name}}">Edit</a>
-    <a class="btn del_btn" href="/delete_confirming/{{dict_name}}/">Delete</a>
+        <a class="btn edit_btn" href="/editing/{{dict_name}}">Edit</a>
+        <a class="btn del_btn" href="/delete_confirming/{{dict_name}}/">Delete</a>
     </div>
+    {% endif %}
     
         
 <script type="text/javascript" src="{%static 'main_page/js/target_dict.js'%}"></script>

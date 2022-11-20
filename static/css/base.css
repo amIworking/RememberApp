@@ -95,6 +95,7 @@ h1{
 }
 
 .m_error{
+    margin: 20px 0;
     color: red;
 }
 .m_subtitle{

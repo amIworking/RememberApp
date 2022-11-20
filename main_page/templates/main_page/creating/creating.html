@@ -8,7 +8,7 @@
     <p class="m_subtitle">Fill fields </p>
     <form action="/creating_saving/" method="post" class="m_form"> <!--range is a custom filter-->
          {% csrf_token %}
-         <p class='m_text'>Click private btn if you don't want to share your dictionary</p>
+         <p class='m_text'>Click "Private" btn if you don't want to share your dictionary</p>
          <input type="radio" name="owner" id="global" value="global" checked>
          <label for="global" class="m_text">Global</label>
           <input type="radio" name="owner" id="private" value="private">
@@ -16,12 +16,34 @@
         <br>
         <input class="m_input" type="text" name = "dict_name" placeholder="list name">
         <button class="m_btn" type="button"><span id="add" class="material-symbols-outlined">add</span></button>
-        <div class="lang_name">
-            <!-- <h3>Names of the languages</h3> -->
-            <input name='lang_from'class="m_input" type="text" id="lang_from" maxlength="2" placeholder="example: EN" oninput="this.value = this.value.toUpperCase()">
-            <input name='lang_to' class="m_input" type="text" id="lang_to" maxlengt='2' placeholder="example: RU" oninput="this.value = this.value.toUpperCase()">
-        </div>
         <p class='m_text m_error'>{{Error_message}}</p>
+        <div class="select_fields">
+        <div class="lang_name select_field">
+            <div class="m_text" for="languages">Languages:</div>
+            <input list = 'languages'name='lang_from'class="m_input" type="text" id="lang_from" maxlength="2" placeholder="example: EN" oninput="this.value = this.value.toUpperCase()">
+            <input list = 'languages' name='lang_to' class="m_input" type="text" id="lang_to" maxlengt='2' placeholder="example: RU" oninput="this.value = this.value.toUpperCase()">
+            <datalist id="languages">
+                <option value="EN"></option>
+                <option value="RU"></option>
+                <option value="SP"></option>
+                <option value="DE"></option>
+                <option value="CH"></option>
+                <option value="PT"></option>
+            </datalist>  
+        </div>
+        <div class="lvl_name select_field">
+            <div class="m_text" for="level">Level: </div>
+            <select class="m_input" id="level" name="level">
+                <option selected>A1</option>
+                <option>A2</option>
+                <option>B1</option>
+                <option>B2</option>
+                <option>C1</option>
+                <option>C2</option>
+            </select>
+        </div>
+        </div>
+        <p class="m_text" id="words_text">Words:</p>
         <div id="words">
             <div class="word_field">
                 <input class="m_input" type="text" placeholder="your word" name="word_0" value="">
