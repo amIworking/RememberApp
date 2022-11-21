@@ -188,7 +188,7 @@ def creating(request):
             data = {"Error_message": "A dictionary with this name already exists"}
             return render(request, "main_page/creating/creating.html", context=data)
         else:
-            user_id = User.objects.get(username=cookies['username'])
+            user_id = User.objects.get(username=cookies.get('username'))
             private = False
             lang_from = request.POST.get('lang_from')
             lang_to = request.POST.get('lang_to')

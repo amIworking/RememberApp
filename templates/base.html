@@ -7,6 +7,7 @@
 </noscript>
     {%load static%}
     <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width"> -->
     <title>{%block title%} {%endblock %}</title>
     <link rel="stylesheet" href="{%static 'css/null.css'%}">
     <link rel="stylesheet" href="{%static 'css/base.css'%}">
@@ -21,24 +22,24 @@
 <body>
     <header class="header">
     <div class="container">
-        <div class="div_name"><h1>{%block h1%}{%endblock %}</h1></div>
+        <div class="page-name"><h1>{%block h1%}{%endblock %}</h1></div>
         <span id="nav1">{%include "includes/navbar_log_out.html" %}</span>
         <span id="nav2">{%include "includes/navbar_log_in.html" %}</span>
     </div>
     </header>
-    <div class="container" id="content_container">
+    <div class="container container-content">
         {%block content%} {%endblock %}
 
     </div>
     
     <footer class="footer">
-        <div class="container">
-            <span class="footer_text">Powered by 
-                <a href="https://t.me/requp" target="_blank" class='footer_link'> @requp</a>
+        <div class="container ">
+            <span class="footer__text">Powered by 
+                <a href="https://t.me/requp" target="_blank" class='footer__link'> @requp</a>
                 | github: 
-                <a class='footer_link' target="_blank" href="https://github.com/amIworking">@amIworking</a>
+                <a class='footer__link' target="_blank" href="https://github.com/amIworking">@amIworking</a>
                 | email: 
-                <a href="https://mail.google.com/mail/u/0/?ogbl#inbox?compose=GTvVlcRwRrrpRCmKBKMnCScqfTktZqfFkRcmmlXlpmmmkVqvDwQRZwKxtLkcJXJvBpDvBsTqfJwxC" target="_blank" class='footer_link'>arvykhip@gmail.com</a>
+                <a href="https://mail.google.com/mail/u/0/?ogbl#inbox?compose=GTvVlcRwRrrpRCmKBKMnCScqfTktZqfFkRcmmlXlpmmmkVqvDwQRZwKxtLkcJXJvBpDvBsTqfJwxC" target="_blank" class='footer__link'>arvykhip@gmail.com</a>
             </span>
         </div>
     </footer>

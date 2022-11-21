@@ -8,6 +8,7 @@ h1{
     font-size: 30px;
 }
 
+
 .container {
     width: 70%;
     max-width: 1024px;
@@ -15,15 +16,16 @@ h1{
     margin: 0 auto;
 }
 
+.container-content{
+    border: #d9d9d9 solid 2px;
+    border-top: none;
+}
 .container:after {
     content: "";
     display: table;
     clear: both;
 }
-#content_container{
-    border: #d9d9d9 solid 2px;
-    border-top: none;
-}
+
 
 .nav {
     float: right;
@@ -57,18 +59,18 @@ h1{
     border: black 0.1px solid;
     background-color: #606060;
     color: white;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
 }
 .footer a{
     color: white;
 }
-.footer_text{
+.footer__text{
     text-align: center;
 }
 
-.div_name {
+.page-name {
     float: left;
     color: black;
 }
@@ -86,11 +88,8 @@ h1{
     color: white;
 }
 
-.footer_text {
-    text-align: center;
-}
 
-.footer_link:hover{
+.footer__link:hover{
     color: rgba(255, 255, 255, 0.336);
 }
 
