@@ -14,12 +14,9 @@ def check_verification(request):
     cookies = request.COOKIES
     login_check = ('username', "email")
     if any(i not in cookies.keys() for i in login_check):
-        data = {"Error_message": "You didn't login"}
-        return False, redirect('/login')
+        return redirect('/login')
     elif len(User.objects.filter(username=cookies['username'])) == 0:
-        data = {"Error_message": "This username doesn't exit"}
-
-        return False,redirect('/login/registration')
+        return redirect('/login/registration')
     else:
         return cookies
 
@@ -37,8 +34,8 @@ def main_page(request):
 def searh_page(request, search_try):
     if search_try == 'creating':
         cookies = check_verification(request)
-        if False in cookies:
-            return cookies[-1]
+        if type(cookies) != dict:
+            return cookies
         return render(request, f"main_page/{search_try}/{search_try}.html")
     elif search_try == "finding":
         popular_dicts = load_dict(Dictionary.objects.filter(private=False))
@@ -67,8 +64,8 @@ def open_dict(request, search_try, path="main_page/finding/target_list.html"):
 
 def show_target_list(request, search_try):
     cookies = check_verification(request)
-    if False in cookies:
-        return cookies[-1]
+    if type(cookies) != dict:
+        return cookies
     data = open_dict(request, search_try)
     data['own_dict'] = False
     data['followed'] = False
@@ -86,8 +83,8 @@ def show_target_list(request, search_try):
 #searching
 def list_searching(request):
     cookies = check_verification(request)
-    if False in cookies:
-        return cookies[-1]
+    if type(cookies) != dict:
+        return cookies
     a = Dictionary.objects.filter(private=False)
     all_dicts = []
     for i in a:
@@ -107,8 +104,8 @@ def list_searching(request):
 #Editing
 def edit_target_list(request, search_try):
     cookies = check_verification(request)
-    if False in cookies:
-        return cookies[-1]
+    if type(cookies) != dict:
+        return cookies
     data = open_dict(request, search_try)
     check_result=check_dict_owner(request, search_try, cookies.get('username'))
     if False in check_result:
@@ -118,8 +115,8 @@ def edit_target_list(request, search_try):
 
 def update_saving(request, search_try):
     cookies = check_verification(request)
-    if False in cookies:
-        return cookies[-1]
+    if type(cookies) != dict:
+        return cookies
     if request.method == "POST":
         # update dict name
         new_name = request.POST["dict_name"]
@@ -177,8 +174,8 @@ def creating(request):
     words = []
     trans = []
     cookies = check_verification(request)
-    if False in cookies:
-        return cookies[-1]
+    if type(cookies) != dict:
+        return cookies
     if request.method == "POST":
         dict_name = request.POST["dict_name"]
         if dict_name == "":
@@ -219,15 +216,15 @@ def creating(request):
 
 def delete_confirming(request, search_try):
     cookies = check_verification(request)
-    if False in cookies:
-        return cookies[-1]
+    if type(cookies) != dict:
+        return cookies
     data = {"dict_name":search_try}
     return render(request, "main_page/deleting/deleting.html", data)
 
 def delete_list(request, search_try):
     cookies = check_verification(request)
-    if False in cookies:
-        return cookies[-1]
+    if type(cookies) != dict:
+        return cookies
     check_list = Dictionary.objects.filter(name = search_try)
     if len(check_list)==0:
         data = {"error_result":"This list dosen't exist", "color":"red"}
@@ -248,8 +245,8 @@ def delete_list(request, search_try):
 
 def adding_follow_dict(request, search_try):
     cookies = check_verification(request)
-    if False in cookies:
-        return cookies[-1]
+    if type(cookies) != dict:
+        return cookies
     target_dict = Dictionary.objects.filter(name = search_try)
     if len(target_dict) == 0:
         return print("There is no dictionary like this")
@@ -262,8 +259,8 @@ def adding_follow_dict(request, search_try):
 
 def remove_follow_dict(request, search_try):
     cookies = check_verification(request)
-    if False in cookies:
-        return cookies[-1]
+    if type(cookies) != dict:
+        return cookies
     target_dict = Dictionary.objects.filter(name=search_try)
     if len(target_dict) == 0:
         return print("There is no dictionary like this")
@@ -279,8 +276,8 @@ def remove_follow_dict(request, search_try):
 
 def repeat_list(request, search_try):
     cookies = check_verification(request)
-    if False in cookies:
-        return cookies[-1]
+    if type(cookies) != dict:
+        return cookies
     get_dict = Dictionary.objects.filter(name = search_try)
     if len(get_dict) == 0:
         return print("This dict doesn't exist")
@@ -299,33 +296,3 @@ def adding_points(request, search_try):
 def speed_training(request):
     return render(request, 'main_page/speed/speed.html')
 
-
-
-"""
-pages = {"repeating": 1, "editor": 2, "deleting": 3, "creation":4}
-def main_page(request):
-    data = {"pages":pages}
-    return render(request, "main_page/index.html", context=data)
-
-def second_page(request):
-    data = {"pages":second_pages}
-    return render(request, "main_page/index.html", context=data)
-
-def searh_page(request, search_try):
-    search_try = search_try.lower()
-
-
-    if searh_try not in pages:
-        return HttpResponseNotFound("Opps")
-    else:
-        description = f"The answer: {pages[searh_try]}"
-        data = {"description_result":description}
-        return render(request, "main_page/test.html", context=data)
- 
-
-def redirect(request, searh_try):
-    if searh_try in range(1,len(pages)+1):
-        result = list(pages)[searh_try-1]
-        return HttpResponseRedirect(f"/{result}/")
-
-"""

@@ -10,10 +10,8 @@ def check_verification(request):
     cookies = request.COOKIES
     login_check = ('username', "email")
     if any(i not in cookies.keys() for i in login_check):
-        data = {"Error_message": "You didn't login"}
         return redirect('/login')
     elif len(User.objects.filter(username=cookies['username'])) == 0:
-        data = {"Error_message": "This username doesn't exit"}
         return redirect('/login/registration')
     else:
         return cookies
@@ -37,6 +35,8 @@ def registration(request):
         data['Error_message'] = 'This email already exists'
     elif len(User.objects.filter(username = username))>0:
         data['Error_message'] = 'This nickname already exists'
+    elif len(username)<4:
+        data['Error_message'] = 'Your nickname has to be at least 4 letters long'
     elif len(password) < 6 or len(password) > 30:
         data['Error_message'] = 'Your password has to be in a range between 6 and 30 ' \
                                 'symbols'
@@ -65,14 +65,14 @@ def setting_cookies(request, user):
             'first_name': user.first_name,
             'last_name': user.last_name}
     response = redirect('/login/profile')
-    req = render(request, 'users/profile/profile.html')
+    #req = render(request, 'users/profile/profile.html')
     for key, value in data.items():
         response.set_cookie(key, value, max_age=None)
     return response
 
-def load_dict(list):
-    target_list = []
-    for i in list:
+def load_dict(dicts):
+    target_dicts_list = []
+    for i in dicts:
         local_dict = {}
         local_dict["name"] = i.name
         local_dict['lang_from'] = i.lang_from
@@ -80,13 +80,13 @@ def load_dict(list):
         local_dict['count'] = len(Translates.objects.filter(dictionary=i))
         local_dict['level'] = i.level
         local_dict['raiting'] = 8.5
-        target_list.append(local_dict)
-    return target_list
+        target_dicts_list.append(local_dict)
+    return  target_dicts_list
 
 def profile_page(request):
     cookies = check_verification(request)
-    if False in cookies:
-        return cookies[-1]
+    if type(cookies) != dict:
+        return cookies
     data = {'username':cookies['username'],
             'email':cookies['email'],
             'first_name':cookies['first_name'],
