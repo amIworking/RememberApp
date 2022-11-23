@@ -46,7 +46,7 @@ def searh_page(request, search_try):
 
 
 #target.html
-def open_dict(request, search_try, path="main_page/finding/target_list.html"):
+def open_dict(request, search_try, path="main_page/finding/target_dict.html"):
     searching = Dictionary.objects.filter(name = search_try)
     result = {}
     if len(searching) == 0:
@@ -62,7 +62,7 @@ def open_dict(request, search_try, path="main_page/finding/target_list.html"):
     return data
 
 
-def show_target_list(request, search_try):
+def show_target_dict(request, search_try):
     cookies = check_verification(request)
     if type(cookies) != dict:
         return cookies
@@ -78,10 +78,10 @@ def show_target_list(request, search_try):
     elif target_dict[0] in user_dists:
         data['followed'] = True
     data['lang_lvl'] = target_dict[0].level
-    return render(request, "main_page/finding/target_list.html", data)
+    return render(request, "main_page/finding/target_dict.html", data)
 
 #searching
-def list_searching(request):
+def dicts_searching(request):
     cookies = check_verification(request)
     if type(cookies) != dict:
         return cookies
@@ -94,7 +94,7 @@ def list_searching(request):
         dict_name = request.POST['searching']
         if all_dicts.count(dict_name)==1:
             data = open_dict(request, dict_name)
-            return render(request, "main_page/finding/target_list.html", data)
+            return render(request, "main_page/finding/target_dict.html", data)
         else:
             answer = "we didn't find anything"
             data = {'all_dicts':all_dicts,'search_result' : answer}
@@ -102,7 +102,7 @@ def list_searching(request):
 
 
 #Editing
-def edit_target_list(request, search_try):
+def edit_target_dict(request, search_try):
     cookies = check_verification(request)
     if type(cookies) != dict:
         return cookies
@@ -194,9 +194,9 @@ def creating(request):
                 return render(request, "main_page/creating/creating.html", context=data)
             if request.POST["owner"] == 'private':
                 private = True
-            new_list = Dictionary(name=dict_name, lang_from = lang_from, lang_to =
+            new_dict = Dictionary(name=dict_name, lang_from = lang_from, lang_to =
             lang_to, owner=user_id, private=private)
-            new_list.save()
+            new_dict.save()
             new_id = Dictionary.objects.get(name=dict_name)
             for key, value in request.POST.items():
                 if value == "" and "word" in key or value == "" and "trans" in key:
@@ -221,25 +221,23 @@ def delete_confirming(request, search_try):
     data = {"dict_name":search_try}
     return render(request, "main_page/deleting/deleting.html", data)
 
-def delete_list(request, search_try):
+def delete_dict(request, search_try):
     cookies = check_verification(request)
     if type(cookies) != dict:
         return cookies
-    check_list = Dictionary.objects.filter(name = search_try)
-    if len(check_list)==0:
-        data = {"error_result":"This list dosen't exist", "color":"red"}
+    if len(Dictionary.objects.filter(name = search_try))==0:
+        data = {"error_result":"This dictionary doesn't exist", "color":"red"}
         return render(request, "main_page/finding/finding.html", data)
     elif Dictionary.objects.get(name = search_try).owner_id != User.objects.get(username=cookies.get('username')).id:
-        data = {"error_result": "You can't delete list which does not belong to you",
-                "color":
-            "red"}
+        data = {"error_result": "You can't delete dictionary which does not belong to "
+                                "you", "color":"red"}
         return render(request, "main_page/finding/finding.html", data)
     else:
         owner_id = User.objects.get(cookies['username']).id
-        target_list = Dictionary.objects.filter(name=search_try, owner_id = owner_id)
-        target_words = Translates.objects.filter(dictionary_id=target_list[0].id)
+        target_dict = Dictionary.objects.filter(name=search_try, owner_id = owner_id)
+        target_words = Translates.objects.filter(dictionary_id=target_dict[0].id)
         target_words.delete()
-        target_list.delete()
+        target_dict.delete()
         data = {"result": "Deleting has been made", "color":"green"}
         return redirect('finding/')
 
@@ -274,7 +272,7 @@ def remove_follow_dict(request, search_try):
 
 
 
-def repeat_list(request, search_try):
+def repeat_dict(request, search_try):
     cookies = check_verification(request)
     if type(cookies) != dict:
         return cookies

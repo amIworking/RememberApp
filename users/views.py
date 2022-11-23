@@ -81,7 +81,7 @@ def load_dict(dicts):
         local_dict['level'] = i.level
         local_dict['raiting'] = 8.5
         target_dicts_list.append(local_dict)
-    return  target_dicts_list
+    return target_dicts_list
 
 def profile_page(request):
     cookies = check_verification(request)
