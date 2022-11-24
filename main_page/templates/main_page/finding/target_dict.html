@@ -7,23 +7,23 @@
 {%block h1%} Target dict {%endblock %}
 {%block content%} 
     <div class="dict_container">
-        <div class="dict_item dict_name m_subtitle" >Dictionary {{dict_name}}</div>
+        <div class="dict_item dict_name m_subtitle" >Dictionary {{dict.name}}</div>
         <div class="dict_item dict_info">
             <div class="dict_icons">
             <div class="lvl m_text">
                 <span class="material-symbols-outlined">signal_cellular_alt</span>
-                {{lang_lvl}}
+                {{dict.level}}
             </div>
-            <div class="count m_text"><span class="material-symbols-outlined">title</span>{{target_dict|length}}</div>
+            <div class="count m_text"><span class="material-symbols-outlined">title</span>{{dict|length}}</div>
         </div>
         <div class="owner_change">
             <div class="owner m_text"><span class="symb">@</span>{{owner}}</div>
-            {%if own_dict%}
+            {%if own_dict %}
                  <a id="owned" class="btn" href="#">Owned</a>
-            {%elif followed%}
-            <a id='followed' class="btn" href="/removing_dict/{{dict_name}}/">Followed</a>
+            {% elif followed %}
+                <a id='followed' class="btn" href="/removing_dict/{{dict_name}}/">Followed</a>
             {% else %}
-            <a class="btn follow" href="/adding_dict/{{dict_name}}/">Follow</a>
+                <a class="btn follow" href="/adding_dict/{{dict_name}}/">Follow</a>
             {% endif %}
         </div>
         </div>

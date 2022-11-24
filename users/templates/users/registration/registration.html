@@ -9,16 +9,28 @@
 
     <form action="/login/registration/" method="post">
         {% csrf_token %}
-        <p class="m_text m_error">{{Error_message}}</p>
+<!--        <p class="m_text m_error">{{form.errors}}</p>-->
         <div class="form_names">
-        <div id="username_name">Username:</div>
-        <div id="email_name">Email:</div>
-        <div id="password_name">Password:</div>
+<!--        <div id="username_name">Username:</div>-->
+<!--        <div id="email_name">Email:</div>-->
+<!--        <div id="password_name">Password:</div>-->
             </div>
         <div class="form_inputs">
-            <p class="m_text">Username: <input class='m_input' type="text" name="username" placeholder="your username"></p>
-            <p class="m_text">Email: <input class='m_input' type="email" name="email" placeholder="your email"></p>
-            <p class="m_text">Password: <input class='m_input' type="password" name="password" placeholder="your password A-z, 0-1"></p>
+            <p class="m_text">
+                Username:
+                <input class='m_input' type="text" name="username" placeholder="your username" value="{{form.username.value}}">
+                <div class="m_text m_error" style="color: #f11c0b">{{form.username.errors}}</div>
+            </p>
+            <p class="m_text">
+                Email:
+                <input class='m_input' type="email" name="email" placeholder="your email" value="{{form.email.value}}">
+                <div class="m_text m_error" style="color: #f11c0b">{{form.email.errors}}</div>
+            </p>
+            <p class="m_text">
+                Password:
+                <input class='m_input' type="password" name="password" placeholder="your password A-z, 0-1" value="{{from.password.value}}">
+                <div class="m_text m_error" style="color: #f11c0b">{{form.password.errors}}</div>
+            </p>
         </div>
         
         <button class="btn">Send</button>

@@ -1,14 +1,26 @@
 
 import json
+
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from  django.urls import reverse
+from django.views.generic import TemplateView
+
 from .models import *
 from users.models import User
 from users.views import load_dict
 
 # Create your views here.
 pages = {"finding": 1, "creating":2}
+
+
+class SomeView(TemplateView):
+    template_name = "main_page/finding/finding.html"
+
+    @login_required
+    def get(self, request, *args, **kwargs):
+        super().get(request, *args, **kwargs)
 
 def check_verification(request):
     cookies = request.COOKIES
@@ -22,9 +34,7 @@ def check_verification(request):
 
 def check_dict_owner(request,dict_name, owner_username):
     owner = User.objects.get(username = owner_username)
-    if len(Dictionary.objects.filter(name=dict_name, owner=owner))==0:
-        return False,redirect('/finding/')
-    return []
+    return Dictionary.objects.filter(name=dict_name, owner=owner).exists()
 
 
 def main_page(request):
@@ -46,38 +56,33 @@ def searh_page(request, search_try):
 
 
 #target.html
-def open_dict(request, search_try, path="main_page/finding/target_dict.html"):
-    searching = Dictionary.objects.filter(name = search_try)
-    result = {}
-    if len(searching) == 0:
-        result = "This dictionary doesn't exist"
-    else:
-        target_list = Translates.objects.filter(dictionary_id = searching[0].id)
-        for i in target_list:
-            result[i.word] = i.translate
-    owner = 'Public'
-    if searching[0].owner!=None:
-        owner = User.objects.get(id = searching[0].owner.id).username
-    data = {'dict_name':search_try, 'target_dict':result, 'owner':owner}
-    return data
+def open_dict(search_try, reverse=False):
+    dict = Dictionary.objects.filter(name__icontains=search_try)[0]
+    if dict is None:
+        return None
+    return {
+        'dict': dict,
+        'target_dict': {
+            i.word: i.translate
+            for i in dict.translates_set.all()
+        } if not reverse else {
+            i.translate: i.word
+            for i in dict.translates_set.all()
+        },
+        'owner': dict.owner and dict.owner.username or 'Public'
+    }
 
 
 def show_target_dict(request, search_try):
     cookies = check_verification(request)
+    user = User.objects.get(username=cookies.get('username'))
     if type(cookies) != dict:
         return cookies
-    data = open_dict(request, search_try)
-    data['own_dict'] = False
-    data['followed'] = False
-    target_dict = Dictionary.objects.filter(name = search_try)
-    user_dists = User.objects.get(username=cookies.get('username')).added_dicts.all()
-    if len(target_dict) == 0:
-        return print("There is no dictionary like this")
-    elif data['owner'] == cookies.get('username'):
-        data['own_dict'] = True
-    elif target_dict[0] in user_dists:
-        data['followed'] = True
-    data['lang_lvl'] = target_dict[0].level
+    data = open_dict(search_try)
+    if data is None:
+        return redirect("/finding/")
+    data['own_dict'] = data['owner'] == cookies.get('username')
+    data['followed'] = user.added_dicts.filter(id=data['dict'].id).exists()
     return render(request, "main_page/finding/target_dict.html", data)
 
 #searching
@@ -85,19 +90,16 @@ def dicts_searching(request):
     cookies = check_verification(request)
     if type(cookies) != dict:
         return cookies
-    a = Dictionary.objects.filter(private=False)
-    all_dicts = []
-    for i in a:
-        all_dicts.append(i.name)
-    answer = None
+    all_dicts = Dictionary.objects.filter(private=False)
+
     if request.method == "POST":
         dict_name = request.POST['searching']
-        if all_dicts.count(dict_name)==1:
-            data = open_dict(request, dict_name)
+        if all_dicts.filter(name__icontains=dict_name).count() == 1:
+            data = open_dict(dict_name)
             return render(request, "main_page/finding/target_dict.html", data)
         else:
             answer = "we didn't find anything"
-            data = {'all_dicts':all_dicts,'search_result' : answer}
+            data = {'all_dicts': all_dicts, 'search_result' : answer}
             return render(request, f"main_page/finding/finding.html", context=data)
 
 
@@ -106,10 +108,9 @@ def edit_target_dict(request, search_try):
     cookies = check_verification(request)
     if type(cookies) != dict:
         return cookies
-    data = open_dict(request, search_try)
-    check_result=check_dict_owner(request, search_try, cookies.get('username'))
-    if False in check_result:
-        return check_result[-1]
+    data = open_dict(search_try)
+    if check_dict_owner(request, search_try, cookies.get('username')):
+        return redirect('/finding/')
     return render(request, "main_page/editing/editing.html", data)
 
 

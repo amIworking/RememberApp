@@ -1,3 +1,8 @@
+from typing import List
+
+from django.contrib.auth.views import LoginView
+from django import forms
+from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseNotFound, HttpResponseRedirect
 from  django.urls import reverse
@@ -18,46 +23,51 @@ def check_verification(request):
 
 def login_page(request):
     response = render(request, 'users/login/login.html')
-    for key in request.COOKIES.keys():
-        response.delete_cookie(key)
+    request.COOKIES.clear()
     return response
+
+
+class RegistrationForm(forms.Form):
+    email = forms.EmailField(required=True)
+    username = forms.CharField(required=True, min_length=4, max_length=20)
+    password = forms.CharField(required=True, min_length=6, max_length=30)
+
+    def clean_email(self):
+        email = self.data['email']
+        if User.objects.filter(email=email).exists():
+            raise ValidationError('This email already exists')
+        return email
+
+    def clean_username(self):
+        username = self.data['username']
+        if User.objects.filter(username=username).exists():
+            raise ValidationError('This username already exists')
+        return username
+
+    def clean_password(self):
+        password = self.data['password']
+        if any(i.isdigit() for i in password) == False:
+            raise ValidationError('Your password has to contain at least 1 number')
+        if password.isdigit():
+            raise ValidationError('Your password has to contain at least 1 string')
+        if password.lower() == password or password.upper() == password:
+            raise ValidationError('Your password has to contain low and upper symbols')
+        return make_password(password)
+
+    def save(self):
+        self.user = User(email=self.cleaned_data['email'],
+                         username=self.cleaned_data['username'],
+                         password=self.cleaned_data['password'])
+        self.user.save()
+        return self.user
 
 
 def registration(request):
-    data = {'Error_message': ''}
-    email = request.POST.get('email',False)
-    username = request.POST.get('username',False)
-    password = request.POST.get('password',False)
-    reg = (email,username,password)
-    if all(reg) == False:
-        data ['Error_message'] = 'At least one field is empty'
-    elif len(User.objects.filter(email = email))>0:
-        data['Error_message'] = 'This email already exists'
-    elif len(User.objects.filter(username = username))>0:
-        data['Error_message'] = 'This nickname already exists'
-    elif len(username)<4:
-        data['Error_message'] = 'Your nickname has to be at least 4 letters long'
-    elif len(password) < 6 or len(password) > 30:
-        data['Error_message'] = 'Your password has to be in a range between 6 and 30 ' \
-                                'symbols'
-    elif any(i.isdigit() for i in password) == False:
-        data['Error_message'] = 'Your password has to contain at least 1 number'
-    elif password.isdigit():
-        data['Error_message'] = 'Your password has to contain at least 1 string'
-    elif password.lower() == password or password.upper() == password:
-        data['Error_message'] = 'Your password has to contain low and upper symbols'
-    else:
-        en_password = make_password(password)
-        print(password)
-        print(en_password)
-        #print(check_password(password,en))
-        new_user= User(email = email, username = username, password = en_password)
-        new_user.save()
+    form = RegistrationForm(request.POST)
+    if form.is_valid():
+        user = form.save()
         return redirect('/login/')
-    response = render(request, 'users/registration/registration.html', context=data)
-    for key in request.COOKIES.keys():
-        response.delete_cookie(key)
-    return response
+    return render(request, 'users/registration/registration.html', context={"form": form})
 
 def setting_cookies(request, user):
     data = {'username': user.username,
@@ -70,18 +80,18 @@ def setting_cookies(request, user):
         response.set_cookie(key, value, max_age=None)
     return response
 
-def load_dict(dicts):
-    target_dicts_list = []
-    for i in dicts:
-        local_dict = {}
-        local_dict["name"] = i.name
-        local_dict['lang_from'] = i.lang_from
-        local_dict['lang_to'] = i.lang_to
-        local_dict['count'] = len(Translates.objects.filter(dictionary=i))
-        local_dict['level'] = i.level
-        local_dict['raiting'] = 8.5
-        target_dicts_list.append(local_dict)
-    return target_dicts_list
+def load_dict(dicts: List[Dictionary]):
+    return [
+        {
+            "name": i.name,
+            'lang_from': i.lang_from,
+            'lang_to': i.lang_to,
+            'count': i.translates_set.count(),
+            'level': i.level,
+            'raiting': 8.5
+        }
+        for i in dicts
+    ]
 
 def profile_page(request):
     cookies = check_verification(request)
@@ -99,26 +109,29 @@ def profile_page(request):
     return render(request, 'users/profile/profile.html', context=data)
 
 
+class LoginForm(forms.Form):
+    login = forms.CharField(required=True)
+    password = forms.CharField(required=True)
 
+    def clean_login(self):
+        data = self.data['login']
+        self.user = User.objects.filter(username=login).first()
+        if not self.user:
+            self.user = User.objects.filter(email=login).first()
+        if not self.user:
+            raise ValidationError("you wrote wrong username or password")
+        return data
+
+    def clean_password(self):
+        self.clean_login()
+        password = self.data["password"]
+        if not check_password(password, self.user.password):
+            raise ValidationError("you wrote wrong username or password")
+        return password
 
 
 def login(request):
-    login = request.POST.get('login',False)
-    password = request.POST.get('password', False)
-    reg = (login, password)
-    data = {'Error_message': ''}
-    if all(reg) == False:
-        data['Error_message'] = 'At least one field is empty'
-    username_check = User.objects.filter(username = login)
-    email_check = User.objects.filter(email = login)
-    if len(username_check):
-        if check_password(password,username_check[0].password):
-            return setting_cookies(request, username_check[0])
-    elif len(email_check):
-        if check_password(password, email_check[0].password):
-            return setting_cookies(request, email_check[0])
-    else:
-        data['Error_message'] = "you wrote wrong username or password"
-        return render(request, 'users/login/login.html', context=data)
-
-
+    form = LoginForm(request.POST)
+    if form.is_valid():
+        return setting_cookies(request, form.user)
+    return render(request, 'users/login/login.html', context={"Error_message": str(form.errors)})
