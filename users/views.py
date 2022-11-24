@@ -65,7 +65,6 @@ def setting_cookies(request, user):
             'first_name': user.first_name,
             'last_name': user.last_name}
     response = redirect('/login/profile')
-    #req = render(request, 'users/profile/profile.html')
     for key, value in data.items():
         response.set_cookie(key, value, max_age=None)
     return response
