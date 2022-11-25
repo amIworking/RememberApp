@@ -105,7 +105,7 @@ def login(request):
     login = request.POST.get('login',False)
     password = request.POST.get('password', False)
     reg = (login, password)
-    data = {'Error_message': ''}
+    data = {'Error_message': ''} 
     if all(reg) == False:
         data['Error_message'] = 'At least one field is empty'
     username_check = User.objects.filter(username = login)
