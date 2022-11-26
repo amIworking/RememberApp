@@ -110,17 +110,17 @@ def profile_page(request):
 
 
 class LoginForm(forms.Form):
-    login = forms.CharField(required=True)
-    password = forms.CharField(required=True)
+    login = forms.CharField(required=True, initial="")
+    password = forms.CharField(required=True, initial="")
 
     def clean_login(self):
-        data = self.data['login']
+        login = self.data['login']
         self.user = User.objects.filter(username=login).first()
         if not self.user:
             self.user = User.objects.filter(email=login).first()
         if not self.user:
             raise ValidationError("you wrote wrong username or password")
-        return data
+        return login
 
     def clean_password(self):
         self.clean_login()
@@ -131,7 +131,10 @@ class LoginForm(forms.Form):
 
 
 def login(request):
-    form = LoginForm(request.POST)
-    if form.is_valid():
-        return setting_cookies(request, form.user)
-    return render(request, 'users/login/login.html', context={"Error_message": str(form.errors)})
+    if request.method == "GET":
+        form = LoginForm()
+    else:
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            return setting_cookies(request, form.user)
+    return render(request, 'users/login/login.html', context={"form": form})

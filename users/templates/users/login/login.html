@@ -8,14 +8,17 @@
     <p class="m_subtitle">Fill all fields</p>
     <form action="/login/login/" method="post">
         {% csrf_token %}
-        <p class="m_text m_error">{{Error_message}}</p>
-        <div class="form_names">
-        <div id="username_name">Username:</div>
-        <div id="password_name">Password:</div>
-            </div>
         <div class="form_inputs">
-            <p class="m_text">Login <input class="m_input" type="text" name="login" placeholder="username/email"></p>
-            <p class="m_text">Password: <input class="m_input" type="password" name="password" placeholder="your password A-z, 0-1"></p>
+            <p class="m_text">
+                Login
+                <input class="m_input" type="text" name="login" placeholder="username/email" value="{{form.login.value}}">
+                {{form.login.errors}}
+            </p>
+            <p class="m_text">
+                Password:
+                <input class="m_input" type="password" name="password" placeholder="your password A-z, 0-1" value="{{form.password.value}}">
+                {{form.password.errors}}
+            </p>
         </div>
         
         <button class="btn">Send</button>
