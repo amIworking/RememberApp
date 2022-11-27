@@ -1,0 +1,19 @@
+.progress-bar{
+    color: red;
+}
+
+.progress-bar::-webkit-progress-value {
+    background: red;
+}
+
+.progress-bar::-webkit-progress-bar {
+    background: blue;
+}
+
+body{
+    position: relative;
+}
+.repeating-container{
+    position: relative;
+    margin: 0 auto;
+}

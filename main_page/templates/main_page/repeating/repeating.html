@@ -7,13 +7,19 @@
 {%block content%} 
 
 <body onload="randomizer()">
-    <span style="display: none;" id="dict_name">{{dict_name}}</span>
-    <span style="display: none;" id="target_dict">{{target_dict}}</span>
+    <div class="repeating-container">
+        <span style="display: none;" id="dict_name">{{dict_name}}</span>
+        <span style="display: none;" id="target_dict">{{target_dict}}</span>
     <span id="fin"></span>
+    <progress class="progress-bar" max="100"></progress>
     <div class="m_text">Translate word: <span id="question_word"></span></div>
-    <input class="m_input" type="text" id="ans" onkeypress="enter_cheсk(event)">
-    <button class="btn" onclick="check1()">Check</button>
+    <input class="m_input" type="text" id="ans" onkeypress="enter_cheсk(event)" oninput="check_answer()">
+    <span class="btn" id="correct_flag" style="display: none;" onclick="correcting()">I was right</span>
+    <!-- <button class="btn" onclick="check_answer()">Check</button> -->
      <div id="ans_res"></div>
+     <span class="btn" id="swithing_words" onclick="swithcing_words()">Switch words' sides</span>
+    </div>
+    
     
 </body>
     <script src="{%static 'main_page/js/repeating.js'%}"></script>
