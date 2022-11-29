@@ -5,7 +5,7 @@ const COUNT = 3;
 console.log(mydata);
 let test = {}
 for (const[key,value] of Object.entries(mydata)){
-    test[key] = 0;
+    test[key] = [0,0];
 }
 AMOUNT_COUNT = Object.keys(test).length*COUNT;
 let random_word;
@@ -21,7 +21,7 @@ function swithcing_words(){
     let newData= {};
     let newTest= {};
     for (const[key,value] of Object.entries(mydata)){
-    newTest[value] = 0;
+    newTest[value] = [0,0];
     newData[value] = key;
     }
     mydata = newData;
@@ -43,10 +43,10 @@ function randomizer(){
 
 function correcting(){
     secion_count++;
-    test[question_word]++;
+    test[question_word][0]++;
     ans_res.style.color = 'green';
-    ans_res.innerHTML = `Right!\nYou answered right. ${1+COUNT-test[question_word]} out of ${COUNT} times left`;
-    if (test[question_word]==COUNT){
+    ans_res.innerHTML = `Right!\nYou answered right. ${1+COUNT-test[question_word][0]} out of ${COUNT} times left`;
+    if (test[question_word][0]==COUNT){
         delete test[question_word];
         }
     correct_flag.style.display='none';
@@ -66,15 +66,21 @@ function check1(){
     ans_res = document.getElementById('ans_res');
     if (mydata[question_word]==answer){
         correct_flag.style.display='none';
-        test[question_word]++;
+        test[question_word][0]++;
         secion_count++;
         ans_res.style.color = 'green';
-        ans_res.innerHTML = `Right!\nYou answered right. ${1+COUNT-test[question_word]} out of ${COUNT} times left`;
-        if (test[question_word]==COUNT){
+        ans_res.innerHTML = `Right!\nYou answered right. ${1+COUNT-test[question_word][0]} out of ${COUNT} times left`;
+        if (test[question_word][1]==0){
             delete test[question_word];
-            } 
+            secion_count+=COUNT-1;
+            ans_res.innerHTML = `Right!\nYou answered right.`;
+            }
+        else if (test[question_word][0]==COUNT){
+            delete test[question_word];
+            }
         }
     else {
+        test[question_word][1]++;
         ans_res.style.color = 'red';
         ans_res.innerHTML = `Wrong!\nThe right answer is "${mydata[question_word]}"`;
         correct_flag.style.display='inline';
@@ -86,20 +92,24 @@ function check1(){
         let dict_name = document.getElementById('dict_name').innerHTML;
         location.href = `/adding_points/${dict_name}`;
     }
-    randomizer()
     console.log(test)
-    
+    randomizer()
 }
 
 function check_answer(){
     let answer = document.getElementById('ans').value;
     question_word = document.getElementById('question_word').innerHTML;
     if (mydata[question_word]==answer){
-            test[question_word]++;
+            test[question_word][0]++;
             secion_count++;
             ans_res.style.color = 'green';
-            ans_res.innerHTML = `Right!\nYou answered right. ${1+COUNT-test[question_word]} out of 3 times left`;
-            if (test[question_word]==3){
+            ans_res.innerHTML = `Right!\nYou answered right. ${1+COUNT-test[question_word][0]} out of 3 times left`;
+            if (test[question_word][1]==0){
+            delete test[question_word];
+            secion_count+=COUNT-1;
+            ans_res.innerHTML = `Right!\nYou answered right.`;
+            }
+            else if (test[question_word][0]==COUNT){
             delete test[question_word];
             }
             document.getElementById('ans').value='';
